@@ -1,16 +1,20 @@
-var express = require('express');
-var app = express();
+ var express = require('express');
+ var app = express(); // create our app w/ express
+ var morgan = require('morgan'); // log requests to the console (express4)
+ var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
+ var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
-app.set('port', (process.env.PORT || 5000));
+ app.use(bodyParser.json());
+ app.use(express.static(__dirname + "/public"));
 
-app.use(express.static(__dirname + '/public'));
+//app.set('port', (process.env.PORT || 5000));
 
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+
 
 app.get('/', function(request, response) {
-  response.render('pages/index');
+	res.contentType('application/json');
+    res.send(JSON.stringify("{titulo:'prueba'}"));
+    res.status(200).end();
 });
 
 app.listen(app.get('port'), function() {
