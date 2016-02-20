@@ -12,9 +12,9 @@ app.set('port', (process.env.PORT || 5000));
 
 
 app.get('/', function(request, response) {
-	res.contentType('application/json');
-    res.send(JSON.stringify("{titulo:'prueba'}"));
-    res.status(200).end();
+	response.contentType('application/json');
+    response.send(JSON.stringify("{titulo:'prueba'}"));
+    response.status(200).end();
 });
 
 app.listen(app.get('port'), function() {
