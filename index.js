@@ -32,7 +32,7 @@ app.get('/clientes', function (request, response) {
 			}else{ 
 				//response.render('pages/db', {results: result.rows} ); 
 				response.contentType('application/json');
-                response.send(JSON.stringify(result));
+                response.send(JSON.stringify(result.rows));
                 response.status(200).end();
 			}
 		});
