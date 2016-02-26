@@ -39,3 +39,20 @@ app.get('/clientes', function (request, response) {
 	});
 });
 
+app.get('/comidas', function (request, response) {
+	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+		client.query('SELECT * FROM Comida', function(err, result) {
+			done();
+			if (err){ 
+				console.error(err); response.send("Error " + err);
+				response.status(400).end(); 
+			}else{ 
+				//response.render('pages/db', {results: result.rows} ); 
+				response.contentType('application/json');
+                response.send(JSON.stringify(result.rows));
+                response.status(200).end();
+			}
+		});
+	});
+});
+
