@@ -4,6 +4,10 @@
  var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
  var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
  var pg = require('pg');
+ var cors = require('cors');
+
+
+app.use(cors());
 
  app.use(bodyParser.json());
  app.use(express.static(__dirname + "/public"));
