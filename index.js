@@ -10,7 +10,7 @@ var corsOptions = {
   origin: 'https://feedmeclient.herokuapp.com/'
 };
 
- app.use(cors());
+ app.use(cors(corsOptions));
 
  app.use(bodyParser.json());
  app.use(express.static(__dirname + "/public"));
@@ -79,7 +79,7 @@ var corsOptions = {
              } else {
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
-                 console.log(result.rows.id_orden); 
+                 //console.log(result.rows.id_orden); 
                  for (var j = 0; j < request.body.foods.length; j++) {
                      sql.values = ["\'"+result.rows[0].id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
