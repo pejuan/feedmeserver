@@ -79,7 +79,7 @@ var corsOptions = {
              } else {
                 console.log("no error");
                  //response.render('pages/db', {results: result.rows} ); 
-                 for (var j = 0; j < request.body.foods; j++) {
+                 for (var j = 0; j < request.body.foods.length; j++) {
                      sql.values = ["\'"+response.body.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
