@@ -77,7 +77,7 @@ var corsOptions = {
                  response.send("Error primer query" + err);
                  response.status(400).end();
              } else {
-                console.log("no error");
+                console.log(result);
                  //response.render('pages/db', {results: result.rows} ); 
                  for (var j = 0; j < request.body.foods.length; j++) {
                      sql.values = ["\'"+response.body.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
