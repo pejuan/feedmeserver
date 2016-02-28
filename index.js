@@ -85,12 +85,14 @@
                              response.status(400).end();
                          } else {
                              //response.render('pages/db', {results: result.rows} );
-                             console.log("success");
-                             response.contentType('application/json');
-                             //response.send(JSON.stringify(result.rows));
-                             //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                             response.status(200).end();
-                             response.send(JSON.stringify(result.rows));
+                             if(j == request.body.foods.length-1){
+                                 console.log("success");
+                                 response.contentType('application/json');
+                                 //response.send(JSON.stringify(result.rows));
+                                 //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                 response.status(201).end();
+                                 //response.send(JSON.stringify(result.rows));
+                            }
                          }
                      });
                  }
@@ -100,4 +102,5 @@
 
 
      });
+
  });
