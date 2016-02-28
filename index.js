@@ -80,7 +80,7 @@ var corsOptions = {
                 console.log(result);
                  //response.render('pages/db', {results: result.rows} ); 
                  for (var j = 0; j < request.body.foods.length; j++) {
-                     sql.values = ["\'"+response.body.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
+                     sql.values = ["\'"+result.rows.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
                      client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
@@ -91,7 +91,8 @@ var corsOptions = {
                              response.send("Error segundo query" + err);
                              response.status(400).end();
                          } else {
-                             //response.render('pages/db', {results: result.rows} ); 
+                             //response.render('pages/db', {results: result.rows} );
+                             console.log("success");
                              response.contentType('application/json');
                              response.send(JSON.stringify(result.rows));
                              response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
