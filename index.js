@@ -6,6 +6,9 @@
  var pg = require('pg');
  var cors = require('cors');
 
+var corsOptions = {
+  origin: 'https://feedmeclient.herokuapp.com/'
+};
 
  app.use(cors());
 
@@ -61,7 +64,7 @@
          });
      });
  });
- app.post('/order', function(request, response) {
+ app.post('/order',cors() ,function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante','estado'] };
@@ -71,7 +74,7 @@
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
              done();
              if (err) {
-                 response.send("Error " + err);
+                 response.send("Error primer query" + err);
                  response.status(400).end();
              } else {
                 console.log("no error");
@@ -85,12 +88,13 @@
                          if (err) {
                             console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                              console.error(err);
-                             response.send("Error " + err);
+                             response.send("Error segundo query" + err);
                              response.status(400).end();
                          } else {
                              //response.render('pages/db', {results: result.rows} ); 
                              response.contentType('application/json');
                              response.send(JSON.stringify(result.rows));
+                             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                              response.status(200).end();
                          }
                      });
