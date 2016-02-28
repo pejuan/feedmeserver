@@ -66,8 +66,8 @@
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante'] }
 
-         sql.values = [11341025, request.idRestaurant];
-   		return sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")"
+         sql.values = ['11341025', "\'"+request.idRestaurant+"\'"];
+   		
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
              done();
              if (err) {
@@ -77,7 +77,7 @@
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
                  for (var j = 0; j < request.foods; j++) {
-                     sql.values = [response.id_orden, request.foods[j].idFood];
+                     sql.values = ["\'"+response.id_orden+"\'", "\'"+request.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
                      client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
