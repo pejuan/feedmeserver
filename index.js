@@ -45,7 +45,7 @@ app.get('/clientes', function (request, response) {
 
 app.get('/comidas', function (request, response) {
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-		client.query('SELECT C.id_comida,R.nom_restaurante FROM Comida C join Restaurante R where C.id_restaurante=R.id_usuario', function(err, result) {
+		client.query('SELECT C.id_comida,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
 			done();
 			if (err){ 
 				console.error(err); response.send("Error " + err);
