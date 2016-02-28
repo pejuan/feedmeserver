@@ -64,6 +64,7 @@
  app.post('/order', function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+        console.log(request.body);
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante','estado'] };
 
          sql.values = ['11341025', "\'"+request.body.idRestaurant+"\'","\'N\'"];
