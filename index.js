@@ -79,6 +79,7 @@
                      client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err2, result) {
                          done();
                          if(j == 0){
+                            console.log("entra " + j);
                              if (err2) {
                                 console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                                  console.error(err);
