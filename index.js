@@ -74,6 +74,7 @@
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
+                console.log("no error");
                  //response.render('pages/db', {results: result.rows} ); 
                  for (var j = 0; j < request.body.foods; j++) {
                      sql.values = ["\'"+response.body.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
@@ -82,7 +83,7 @@
                      client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
                          done();
                          if (err) {
-
+                            console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                              console.error(err);
                              response.send("Error " + err);
                              response.status(400).end();
