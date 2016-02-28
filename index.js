@@ -67,11 +67,12 @@
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante'] }
 
          sql.values = ['11341025', "\'"+request.idRestaurant+"\'","\'N\'"];
-   		
+   		console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")")
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
              done();
              if (err) {
                  console.error(err);
+
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
