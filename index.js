@@ -36,8 +36,8 @@ app.use(function(req, res, next) {
 
     // intercept OPTIONS method
     if (oneof && req.method == 'OPTIONS') {
-        res.send(200);
-    }
+        console.log("entra options");
+        res.send(200).end();
     else {
         next();
     }
@@ -102,7 +102,6 @@ app.use(function(req, res, next) {
                  //response.render('pages/db', {results: result.rows} );
                  //console.log(result.rows.id_orden);                  
                  for (var j = 0; j < request.body.foods.length; j++) {
-                    console.log("entra1 " + j);
                      sql.values = ["\'"+result.rows[0].id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
