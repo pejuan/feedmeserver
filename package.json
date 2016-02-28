@@ -10,9 +10,13 @@
     "body-parser": "~1.5.2",
     "method-override": "~2.1.2",
     "pg": "4.x",
-    "cors": "2.7.1"
+    "cors": "2.7.1",
+    "bower": "0.6.x"
   },
   "engines": {
     "node": "0.12.7"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
