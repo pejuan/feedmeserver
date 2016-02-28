@@ -96,7 +96,7 @@ var corsOptions = {
                              console.log("success");
                              response.contentType('application/json');
                              response.send(JSON.stringify(result.rows));
-                             response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                              response.status(200).end();
                          }
                      });
