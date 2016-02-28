@@ -73,7 +73,7 @@
              if (err) {
              	
                  console.error(err);
-
+                 console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
