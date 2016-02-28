@@ -93,12 +93,13 @@
                                      response.contentType('application/json');
                                      //response.send(JSON.stringify(result.rows));
                                      //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                                     response.status(201).end();
+                                     
                                      //response.send(JSON.stringify(result.rows));
                             }
                          }
                      });
                  }
+                 response.status(201).end();
              }
 
          });
