@@ -67,11 +67,11 @@ var corsOptions = {
  app.post('/order',cors() ,function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante','estado'] };
+         var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden','id_cliente', 'id_restaurante','estado'] };
 
-         sql.values = ['11341025', "\'"+request.body.idRestaurant+"\'","\'N\'"];
+         sql.values = ['DEFAULT','11341025', "\'"+request.body.idRestaurant+"\'","\'N\'"];
    		
-         client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
+         client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden" , function(err, result) {
              done();
              if (err) {
                  response.send("Error primer query" + err);
