@@ -77,7 +77,7 @@ var corsOptions = {
                  response.send("Error primer query" + err);
                  response.status(400).end();
              } else {
-                console.log(result.rows[0].id_orden);
+                //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
                  console.log(result.rows.id_orden); 
                  for (var j = 0; j < request.body.foods.length; j++) {
@@ -95,9 +95,10 @@ var corsOptions = {
                              //response.render('pages/db', {results: result.rows} );
                              console.log("success");
                              response.contentType('application/json');
-                             response.send(JSON.stringify(result.rows));
+                             //response.send(JSON.stringify(result.rows));
                              //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                              response.status(200).end();
+                             response.send(JSON.stringify(result.rows));
                          }
                      });
                  }
