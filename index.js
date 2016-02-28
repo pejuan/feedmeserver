@@ -17,8 +17,11 @@
 
  app.all('/order', function (request, response, next) {
   console.log("entra options");
+  console.log(request);
+  if(request.type = 'options'){
     response.contentType('application/json');
     response.send(JSON.stringify(result.rows));
+    }
     response.status(201).end();
   next(); // pass control to the next handler
 });
