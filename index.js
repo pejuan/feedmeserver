@@ -69,6 +69,8 @@
                  response.send("Error primer query" + err);
                  response.status(400).end();
              } else {
+                response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                response.status(201).end();
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
                  //console.log(result.rows.id_orden);                  
@@ -99,7 +101,7 @@
                          }
                      });
                  }
-                 response.status(201).end();
+
              }
 
          });
