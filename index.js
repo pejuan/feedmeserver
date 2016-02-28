@@ -76,10 +76,10 @@
                      sql.values = ["\'"+result.rows[0].id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
-                     client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
+                     client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err2, result) {
                          done();
-                         if(j == request.body.foods.length-1){
-                             if (err) {
+                         if(j == 0){
+                             if (err2) {
                                 console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                                  console.error(err);
                                  response.send("Error segundo query" + err);
