@@ -15,6 +15,13 @@
  app.set('port', (process.env.PORT || 5000));
 
 
+ app.all('/order', function (req, res, next) {
+  console.log("entra options");
+    response.contentType('application/json');
+    response.send(JSON.stringify(result.rows));
+    response.status(201).end();
+  next(); // pass control to the next handler
+});
 
 
  app.listen(app.get('port'), function() {
@@ -112,9 +119,3 @@
 
  });
 
- app.options('/order',function(request, response) {
-    console.log("entra options");
-    response.contentType('application/json');
-    response.send(JSON.stringify(result.rows));
-    response.status(201).end();
- });
