@@ -64,7 +64,7 @@ var corsOptions = {
          });
      });
  });
- app.post('/order',cors() ,function(request, response) {
+ app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden','id_cliente', 'id_restaurante','estado'] };
@@ -78,7 +78,8 @@ var corsOptions = {
                  response.status(400).end();
              } else {
                 console.log(result);
-                 //response.render('pages/db', {results: result.rows} ); 
+                 //response.render('pages/db', {results: result.rows} );
+                 console.log(result.rows.id_orden); 
                  for (var j = 0; j < request.body.foods.length; j++) {
                      sql.values = ["\'"+result.rows.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
