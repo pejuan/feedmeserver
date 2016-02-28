@@ -64,7 +64,6 @@
  app.post('/order', function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        console.log(request.body);
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_cliente', 'id_restaurante','estado'] };
 
          sql.values = ['11341025', "\'"+request.body.idRestaurant+"\'","\'N\'"];
@@ -72,15 +71,12 @@
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
              done();
              if (err) {
-             	
-                 console.error(err);
-                 console.error(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
-                 for (var j = 0; j < request.foods; j++) {
-                     sql.values = ["\'"+response.id_orden+"\'", "\'"+request.foods[j].idFood +"\'"];
+                 for (var j = 0; j < request.body.foods; j++) {
+                     sql.values = ["\'"+response.body.id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
                      sql.table = "Comida_pertenece_orden";
                      client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")", function(err, result) {
