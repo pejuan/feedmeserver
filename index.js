@@ -70,7 +70,7 @@
                  response.status(400).end();
              } else {
                 response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                response.render('pages/db', {results: result.rows};
+                //response.render('pages/db', {results: result.rows};
                 response.status(201).end();
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
@@ -113,5 +113,8 @@
  });
 
  app.options('/order',function(request, response) {
-    response.send(200).end();
+    console.log("entra options");
+    response.contentType('application/json');
+    response.send(JSON.stringify(result.rows));
+    response.status(201).end();
  });
