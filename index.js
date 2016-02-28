@@ -15,15 +15,14 @@
  app.set('port', (process.env.PORT || 5000));
 
 
- app.all('/order', function (request, response, next) {
+ app.options('/order', function (request, response) {
   console.log("entra options");
-  console.log(request);
-  if(request.type = 'options'){
+  //console.log(request);
     response.contentType('application/json');
     response.send(JSON.stringify(result.rows));
-    }
+    
     response.status(201).end();
-  next(); // pass control to the next handler
+  //next(); // pass control to the next handler
 });
 
 
