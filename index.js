@@ -38,7 +38,7 @@ app.use(function(req, res, next) {
     if (oneof && req.method == 'OPTIONS') {
         console.log("entra options");
         res.send(200).end();
-    else {
+    }else {
         next();
     }
 });
