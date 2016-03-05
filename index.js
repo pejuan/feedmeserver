@@ -66,7 +66,7 @@ app.options('/order', cors());
              done();
              if (err) {
                  response.send("Error primer query" + err);
-                 Console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden");
+                 console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden");
                  response.status(400).end();
              } else {
                 response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
