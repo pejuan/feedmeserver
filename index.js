@@ -58,9 +58,9 @@ app.options('/order', cors());
  app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden','id_cliente', 'id_restaurante','estado'] };
+         var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden', 'id_restaurante','estado','id_cliente'] };
 
-         sql.values = ['DEFAULT',"xavier.munguia@unitec.edu", "\'"+request.body.idRestaurant+"\'","\'N\'"];
+         sql.values = ['DEFAULT', "\'"+request.body.idRestaurant+"\'","\'N\'",'xavier.munguia@unitec.edu'];
    		
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden" , function(err, result) {
              done();
