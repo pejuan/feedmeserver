@@ -55,6 +55,22 @@ app.options('/order', cors());
          });
      });
  });
+ app.get('/orders', function(request,response){
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT O.id_orden, O.id_cliente, O.id_restaurante, O.estado FROM Orden O', function(err, result){
+            done();
+            if (err){
+               console.error(err);
+               response.send("Error type " + err );
+               response.status(400).end();
+            }else{
+               response.contentType('application/json');
+               response.send(JSON.stringify(result.rows));
+               response.status(200).end();
+            }
+         });
+     });
+ });
  app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
