@@ -89,7 +89,7 @@ app.options('/order', cors());
  });
  app.get('comidas_restaurante', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query("SELECT C.nombre FROM Comida C WHERE C.id_comida= (SELECT P.id_comida FROM comida_pertenece_orden P WHERE P.id_orden=(SELECT O.id_orden FROM Orden O WHERE O.id_cliente = 'xavier.munguia@unitec.edu'))",function(err, result)){
+         client.query("SELECT C.nombre FROM Comida C WHERE C.id_comida = (SELECT P.id_comida FROM comida_pertenece_orden P WHERE P.id_orden=(SELECT O.id_orden FROM Orden O WHERE O.id_cliente = 'xavier.munguia@unitec.edu'))",function(err, result){
            done();
            if(err){
              console.error(err);
@@ -100,9 +100,9 @@ app.options('/order', cors());
              response.send(JSON.stringify(result.rows));
              response.status(200).end();
            }
-         }
-     })
- })
+         });
+     });
+ });
  app.post('/restaurante',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO', table: 'Restaurante', columns: ['id_usuario', 'contrasena', 'nom_restaurante']}
