@@ -71,6 +71,34 @@ app.options('/order', cors());
          });
      });
  });
+ app.get('/comida_pertenece_orden', function(request,response){
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+            client.query('SELECT * FROM comida_pertenece_orden', function(err, result){
+              done();
+              if(err){
+                console.error(err);
+                response.send("Error type " + err );
+                response.status(400).end();
+              }else{
+                response.contentType('application/json');
+                response.send(JSON.stringify(result.rows));
+                response.status(200).end();
+              }
+            });
+        });  
+ });
+ app.post('/restaurante',function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         var sql = { query: 'INSERT INTO', table: 'Restaurante', columns: ['id_usuario', 'contrasena', 'nom_restaurante']}
+         //var user = params[:id_usuario];
+         //var pass = params[:contrasena];
+         //var name = params[:nom_restaurante];
+         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ "VALUES ("+request.body.id_usuario+","+request.body.contrasena+","+request.body.nom_restaurante)
+     });
+ });
+ 
+ 
+ 
  app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
