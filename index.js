@@ -89,7 +89,7 @@ app.options('/order', cors());
  });
  app.get('comidas_restaurante', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query("SELECT C.nombre FROM Comida C WHERE C.id_comida = (SELECT P.id_comida FROM comida_pertenece_orden P WHERE P.id_orden=(SELECT O.id_orden FROM Orden O WHERE O.id_cliente = 'xavier.munguia@unitec.edu'))",function(err, result){
+         client.query("SELECT C.nombre FROM Comida C on C.id_comida = (SELECT P.id_comida FROM comida_pertenece_orden P on P.id_orden=(SELECT O.id_orden FROM Orden O on O.id_cliente = 'xavier.munguia@unitec.edu'))",function(err, result){
            done();
            if(err){
              console.error(err);
