@@ -87,6 +87,22 @@ app.options('/order', cors());
             });
         });  
  });
+ app.get('comidas_restaurante', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT C.nombre FROM Comida C join comida_pertenece_orden P WHERE P.id_comida=C.id_comida',function(err, result)){
+           done();
+           if(err){
+             console.error(err);
+             response.send("Error type " + err );
+             response.status(400).end();
+           }else{
+             response.contentType('application/json');
+             response.send(JSON.stringify(result.rows));
+             response.status(200).end();
+           }
+         }
+     })
+ })
  app.post('/restaurante',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO', table: 'Restaurante', columns: ['id_usuario', 'contrasena', 'nom_restaurante']}
