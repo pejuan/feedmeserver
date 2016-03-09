@@ -90,7 +90,7 @@ app.options('/order', cors());
 
  app.get('/comidas_cliente', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query("SELECT * FROM Comida C join Orden O on O.id_comida = C.id_comida",function(err, result){
+         client.query("SELECT * FROM Comida C join comida_pertenece_orden O on O.id_comida = C.id_comida",function(err, result){
            done();
            if(err){
              console.error(err);
