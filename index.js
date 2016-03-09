@@ -61,7 +61,7 @@ app.options('/order', cors());
             done();
             if (err){
                console.error(err);
-               response.send("Error type " + err );
+               response.send(err);
                response.status(400).end();
             }else{
                response.contentType('application/json');
@@ -77,7 +77,7 @@ app.options('/order', cors());
               done();
               if(err){
                 console.error(err);
-                response.send("Error type " + err );
+                response.send(err);
                 response.status(400).end();
               }else{
                 response.contentType('application/json');
