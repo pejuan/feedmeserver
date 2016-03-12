@@ -225,9 +225,8 @@ app.post('/historialOrdenes', function(req, res) {
                 console.error(err);
                 console.log(req.body);
             }else{
-                //response.send(JSON.stringify(result.rows));
+                response.send(JSON.stringify(result.rows));
                 var ordenes = result.rows;
-                res.send("existe");
                 res.status(200).end();
             }
          });
