@@ -225,6 +225,7 @@ app.post('/historialOrdenes', function(req, res) {
                 console.error(err);
                 console.log(req.body);
             }else{
+                res.contentType('application/json');
                 res.send(JSON.stringify(result.rows));
                 var ordenes = result.rows;
                 res.status(200).end();
