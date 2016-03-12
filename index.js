@@ -218,32 +218,31 @@ app.options('/order', cors());
 
 app.post('/historialOrdenes', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
-         client.query(sql.query + sql.table + sql.where, function(err, result){
-            done();
-            if(err){
-                console.error(err);
-                console.log(req.body);
-            }else{
-                noterminado = true;
-                var ordenes = result.rows;
-                for(i=0;i<ordenes.length; i++){
-                    console.log("row1 "+ordenes[i]);
-                    client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+ordenes[i].id_orden+"\'",function(err2,result2){
-                        console.log("row2 "+result.rows);
-                        //ordenes[i].comidas = result2.rows;
-                        if(i == ordenes.length-1){
-                            noterminado = false;
-                            console.log("sale");
-                            res.contentType('application/json');
-                            res.send(JSON.stringify(ordenes));
-                            res.status(200).end();
-                        }
-                    });
-                }
-                
-            }
-         });
+         client.connect(function(err) {
+        var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
+          client.query(sql.query + sql.table + sql.where, function(err, projects) {
+            console.log("ordenes");
+        if (err) return console.error(err);
+        async.each(projects.rows, addComidasToOrden, function(err) {
+          if (err) return console.error(err);
+          // all project rows have been handled now
+          console.log(projects.rows);
+          res.contentType('application/json');
+          res.send(JSON.stringify(projects.rows));
+          res.status(200).end();
+        });
+      });
+    });
      });
  });
+
+var addComidasToOrden = function(projectRow, cb) { // called once for each project row
+    client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
+        console.log("comidas");
+      if(err) return cb(err); // let Async know there was an error. Further processing will stop
+      projectRow.comidas = result.rows;
+      cb(null); // no error, continue with next projectRow, if any
+    });
+  };
+
 
