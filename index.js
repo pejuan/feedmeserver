@@ -230,16 +230,16 @@ app.post('/historialOrdenes', function(req, res) {
                 for(i=0;i<result.rows.length; i++){
                     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+result.rows[i].id_orden+"\'",function(err2,result2){
                         result.rows[i].comidas = result2.rows;
-                        if(i == result.rows.length-1){
+                        if(i === result.rows.length-1){
                             noterminado = false;
                             console.log("sale");
+                            res.contentType('application/json');
+                            res.send(JSON.stringify(result.rows));
+                            res.status(200).end();
                         }
                     });
                 }
-                while(noterminado){}
-                res.contentType('application/json');
-                res.send(JSON.stringify(result.rows));
-                res.status(200).end();
+                
             }
          });
      });
