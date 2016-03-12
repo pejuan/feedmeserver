@@ -15,6 +15,8 @@
 
  app.set('port', (process.env.PORT || 5000));
 
+var client = new pg.Client(process.env.DATABASE_URL);
+
 app.options('/order', cors());
 
  app.listen(app.get('port'), function() {
@@ -216,7 +218,7 @@ app.options('/order', cors());
      });
  });
 
-var client = new pg.Client(process.env.DATABASE_URL);
+
 app.post('/historialOrdenes', function(req, res) {
      //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.connect(function(err) {
