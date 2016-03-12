@@ -216,9 +216,9 @@ app.options('/order', cors());
      });
  });
 
-
+var client = new pg.Client(process.env.DATABASE_URL);
 app.post('/historialOrdenes', function(req, res) {
-     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+     //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.connect(function(err) {
         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.where, function(err, projects) {
@@ -234,20 +234,16 @@ app.post('/historialOrdenes', function(req, res) {
         });
       });
     });
-     });
+    // });
  });
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
-    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.connect(function(err) {
     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
         console.log("comidas");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
     });
-    });
-     });
   };
 
 
