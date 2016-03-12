@@ -178,11 +178,12 @@ app.options('/order', cors());
 
  app.post('/logincliente', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+req.body.correo+'AND contrasena = '+req.body.contrasena};
+         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+req.body.correo+' AND contrasena = '+req.body.contrasena};
          client.query(sql.query + sql.table + sql.where, function(err, result){
             done();
             if(err){
                 console.error(err);
+                console.log(sql.query + sql.table + sql.where);
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
