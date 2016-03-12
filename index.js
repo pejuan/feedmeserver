@@ -208,8 +208,8 @@ app.options('/order', cors());
                 console.error(err);
                 console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
-                response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                response.status(201).end();
+                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                res.status(201).end();
             }
          });
      });
@@ -218,7 +218,7 @@ app.options('/order', cors());
 
 app.post('/historialOrdenes', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+req.body.id_cliente};
+         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
             done();
             if(err){
