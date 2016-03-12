@@ -228,8 +228,9 @@ app.post('/historialOrdenes', function(req, res) {
                 noterminado = true;
                 var ordenes = result.rows;
                 for(i=0;i<ordenes.length; i++){
+                    console.log("row1 "+ordenes[i]);
                     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+ordenes[i].id_orden+"\'",function(err2,result2){
-                        console.log("row "+ordenes[i]);
+                        console.log("row2 "+ordenes[i]);
                         ordenes[i].comidas = result2.rows;
                         if(i == ordenes.length-1){
                             noterminado = false;
