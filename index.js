@@ -216,7 +216,7 @@ app.options('/order', cors());
  });
 
 
-app.get('/historialOrdenes', function(req, res) {
+app.post('/historialOrdenes', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+req.body.id_cliente};
          client.query(sql.query + sql.table + sql.where, function(err, result){
