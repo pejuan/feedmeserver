@@ -171,3 +171,45 @@ app.options('/order', cors());
 
  });
 
+ app.post('/logoutcliente', function(req, res) {
+    response.status(200).end();
+ });
+
+ app.post('/logincliente', function(req, res) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         var sql = { query: 'SELECT * FROM', table: 'Cliente', where: ' where correo = '+request.body.correo+'AND contrasena = '+request.body.contrasena};
+         client.query(sql.query + sql.table + sql.where, function(err, result){
+            done();
+            if(err){
+                console.error(err);
+            }else{
+                if (result.rows.length > 0) {
+                         //res.redirect('/registry');
+                         res.send("existe");
+                         res.status(200).end();
+                     } else {
+                         console.log("no encontrado");
+                         //res.redirect('/login');
+                         res.status(401).end();
+                     }
+            }
+         });
+     });
+ });
+
+ app.post('/registrycliente', function(req, res) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         var sql = { query: 'INSERT INTO', table: 'Cliente', columns: ['corrreo', 'nombre', 'contrasena']};
+         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ "VALUES ("+request.body.correo+","+request.body.nombre+","+request.body.contrasena, function(err, result){
+            done();
+            if(err){
+                console.error(err);
+            }else{
+                response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                response.status(201).end();
+            }
+         });
+     });
+ });
+
+
