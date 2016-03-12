@@ -201,11 +201,12 @@ app.options('/order', cors());
 
  app.post('/registrycliente', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['corrreo', 'nombre', 'contrasena']};
+         var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['correo', 'nombre', 'contrasena']};
          client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")", function(err, result){
             done();
             if(err){
                 console.error(err);
+                console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
                 response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 response.status(201).end();
