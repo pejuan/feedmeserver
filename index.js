@@ -178,7 +178,7 @@ app.options('/order', cors());
 
  app.post('/logincliente', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+req.body.correo+' AND contrasena = '+req.body.contrasena};
+         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+"\'"+req.body.correo+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
             done();
             if(err){
@@ -202,7 +202,7 @@ app.options('/order', cors());
  app.post('/registrycliente', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['correo', 'nombre', 'contrasena']};
-         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")", function(err, result){
+         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"\'"+req.body.contrasena+"\'"+")", function(err, result){
             done();
             if(err){
                 console.error(err);
