@@ -5,6 +5,7 @@
  var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
  var pg = require('pg');
  var cors = require('cors');
+ var async = require('async');
 
 
  app.use(cors());
