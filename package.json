@@ -11,7 +11,7 @@
     "method-override": "~2.1.2",
     "pg": "4.x",
     "cors": "2.7.1",
-    "async": "x.x.x",
+    "async": "x.x.x"
   },
   "engines": {
     "node": "0.12.7"
