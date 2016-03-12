@@ -223,9 +223,9 @@ app.post('/historialOrdenes', function(req, res) {
         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.where, function(err, projects) {
             console.log("ordenes");
-        if (err) return console.error(err);
+        if (err) return console.error("error1"+err);
         async.each(projects.rows, addComidasToOrden, function(err) {
-          if (err) return console.error(err);
+          if (err) return console.error("error2"+err);
           // all project rows have been handled now
           console.log(projects.rows);
           res.contentType('application/json');
@@ -240,7 +240,7 @@ app.post('/historialOrdenes', function(req, res) {
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
         console.log("comidas");
-      if(err) return cb(err); // let Async know there was an error. Further processing will stop
+      if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
     });
