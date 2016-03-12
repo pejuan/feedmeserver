@@ -183,7 +183,7 @@ app.options('/order', cors());
             done();
             if(err){
                 console.error(err);
-                console.log(sql.query + sql.table + sql.where);
+                console.log(req.body);
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
