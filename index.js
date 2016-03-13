@@ -11,7 +11,7 @@
  app.use(cors());
 
  app.use(bodyParser.json());
- app.use(express.static(__dirname + "/public"));
+ app.use(express.static(__dirname + "/www"));
 
  app.set('port', (process.env.PORT || 5000));
 
@@ -47,11 +47,12 @@ app.options('/order', cors());
              done();
              if (err) {
                  console.error(err);
+                 response.header("Access-Control-Allow-Origin");
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
-                  response.header("Access-Control-Allow-Origin");
+                 response.header("Access-Control-Allow-Origin");
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
                  response.status(200).end();
