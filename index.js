@@ -124,7 +124,7 @@ app.options('/order', cors());
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden', 'id_restaurante','estado','id_cliente'] };
 
-         sql.values = ['DEFAULT', "\'"+request.body.idRestaurant+"\'","\'N\'","\'"+request.body.id_cliente+"\'"];
+         sql.values = ['DEFAULT', "\'"+request.body.idRestaurant+"\'","\'N\'","'xavier.munguia@unitec.edu'"];
    		
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden" , function(err, result) {
              done();
@@ -183,7 +183,6 @@ app.options('/order', cors());
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+"\'"+req.body.correo+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
-         
             done();
             if(err){
                 console.error(err);
@@ -191,7 +190,7 @@ app.options('/order', cors());
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
-                         res.send(result);
+                         res.send("existe");
                          res.status(200).end();
                      } else {
                          console.log("no encontrado");
@@ -207,13 +206,11 @@ app.options('/order', cors());
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['correo', 'nombre', 'contrasena']};
          client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"\'"+req.body.contrasena+"\'"+")", function(err, result){
-        
             done();
             if(err){
                 console.error(err);
                 console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
-                res.send(result);
                 res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 res.status(201).end();
             }
@@ -227,12 +224,12 @@ app.post('/historialOrdenes', function(req, res) {
          client.connect(function(err) {
         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.where, function(err, projects) {
-            //console.log("ordenes");
+            console.log("ordenes");
         if (err) return console.error("error1"+err);
         async.each(projects.rows, addComidasToOrden, function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
-          //console.log(projects.rows);
+          console.log(projects.rows);
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
@@ -243,9 +240,8 @@ app.post('/historialOrdenes', function(req, res) {
  });
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
-    client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO where CO.id_orden= '+"\'"+projectRow.id_orden+"\'"+"join Comida C on C.id_comida = CO.id_comida", 
-        function(err, result) {
-        //console.log("comidas");
+    client.query('select CO.id,CO.id_orden,CO.id_comida from Comida_pertenece_orden CO where CO.id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
+        console.log("comidas");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
