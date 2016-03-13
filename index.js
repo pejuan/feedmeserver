@@ -241,6 +241,13 @@ app.post('/historialOrdenes', function(req, res) {
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
+             client.query('select nombre,id_restaurante from Comida where id_comida= '+"\'"+result.id_comida+"\'", function(err2, result2) {
+                  //console.log("comidas");
+                  //if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
+                  result.rows.nombre = result2.rows.nombre;
+                  result.rows.id_restaurante = result2.rows.id_restaurante;
+                  cb(null); // no error, continue with next projectRow, if any
+            });
         console.log("comidas");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
