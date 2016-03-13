@@ -227,7 +227,7 @@ app.post('/historialOrdenes', function(req, res) {
           client2.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
-        async.each(projects.rows, addComidasToOrden(client), function(err) {
+        async.each(projects.rows, addComidasToOrden, function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
@@ -241,7 +241,7 @@ app.post('/historialOrdenes', function(req, res) {
      });
  });
 
-var addComidasToOrden = function(projectRow, cb, client) { // called once for each project row
+var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client2.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
         //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
