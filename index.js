@@ -224,12 +224,12 @@ app.post('/historialOrdenes', function(req, res) {
          client.connect(function(err) {
         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.where, function(err, projects) {
-            console.log("ordenes");
+            //console.log("ordenes");
         if (err) return console.error("error1"+err);
         async.each(projects.rows, addComidasToOrden, function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
-          console.log(projects.rows);
+          //console.log(projects.rows);
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
@@ -240,8 +240,8 @@ app.post('/historialOrdenes', function(req, res) {
  });
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
-    client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
-        console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
+    client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
+        //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
