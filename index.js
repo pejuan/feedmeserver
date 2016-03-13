@@ -183,7 +183,7 @@ app.options('/order', cors());
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+"\'"+req.body.correo+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
-            console.log(result)
+         
             done();
             if(err){
                 console.error(err);
@@ -191,7 +191,7 @@ app.options('/order', cors());
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
-                         res.send("existe");
+                         res.send(result);
                          res.status(200).end();
                      } else {
                          console.log("no encontrado");
@@ -207,12 +207,13 @@ app.options('/order', cors());
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['correo', 'nombre', 'contrasena']};
          client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"\'"+req.body.contrasena+"\'"+")", function(err, result){
-            console.log(result)
+        
             done();
             if(err){
                 console.error(err);
                 console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
+                res.send(result);
                 res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                 res.status(201).end();
             }
