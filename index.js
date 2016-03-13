@@ -47,12 +47,12 @@ app.options('/order', cors());
              done();
              if (err) {
                  console.error(err);
-                 responseheader("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
-                 responseheader("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
                  response.status(200).end();
@@ -135,7 +135,7 @@ app.options('/order', cors());
                  console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden");
                  response.status(400).end();
              } else {
-                responseheader("Access-Control-Allow-Origin: http://localhost:8100");
+                response.header("Access-Control-Allow-Origin: http://localhost:8100");
                 //response.render('pages/db', {results: result.rows};
                 response.status(201).end();
                 //console.log(result.rows[0].id_orden);
@@ -160,7 +160,7 @@ app.options('/order', cors());
                                      console.log("success" + j);
                                      response.contentType('application/json');
                                      //response.send(JSON.stringify(result.rows));
-                                     responseheader("Access-Control-Allow-Origin: http://localhost:8100");
+                                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
                                      
                                      //response.send(JSON.stringify(result.rows));
                             }
