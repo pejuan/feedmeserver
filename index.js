@@ -249,7 +249,7 @@ var addComidasToOrden = function(projectRow, cb) { // called once for each proje
                   //if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
                   result.rows.nombre = result2.rows.nombre;
                   result.rows.id_restaurante = result2.rows.id_restaurante;
-                  cb(null); // no error, continue with next projectRow, if any
+                  //cb(null); // no error, continue with next projectRow, if any
             });
         console.log("comidas");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
