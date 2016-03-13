@@ -227,12 +227,12 @@ app.post('/historialOrdenes', function(req, res) {
          client.connect(function(err) {
         var sql = { query: 'SELECT * FROM ', table: 'Orden', where: ' where id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.where, function(err, projects) {
-            console.log("ordenes");
+            //console.log("ordenes");
         if (err) return console.error("error1"+err);
         async.each(projects.rows, addComidasToOrden, function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
-          console.log(projects.rows);
+          //console.log(projects.rows);
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
@@ -244,14 +244,15 @@ app.post('/historialOrdenes', function(req, res) {
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client.query('select * from Comida_pertenece_orden where id_orden= '+"\'"+projectRow.id_orden+"\'", function(err, result) {
-             client.query('select nombre,id_restaurante from Comida where id_comida= '+"\'"+result.id_comida+"\'", function(err2, result2) {
+             client.query('select nombre,id_restaurante from Comida where id_comida= '+"\'"+result.rows.id_comida+"\'", function(err2, result2) {
                   //console.log("comidas");
                   //if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
+                  console.log(result2.rows);
                   result.rows.nombre = result2.rows.nombre;
                   result.rows.id_restaurante = result2.rows.id_restaurante;
                   //cb(null); // no error, continue with next projectRow, if any
             });
-        console.log("comidas");
+        //console.log("comidas");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
