@@ -246,7 +246,7 @@ app.post('/historialOrdenes', function(req, res) {
           res.status(200).end();
         });
       });
-    query.on('end', function() { client.end(); });
+    //query.on('end', function() { client.end(); });
     });
     //client.end();
      //});
