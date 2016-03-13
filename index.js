@@ -11,11 +11,11 @@
  app.use(cors());
 
  app.use(bodyParser.json());
- app.use(express.static(__dirname + "/public"));
+ app.use(express.static(__dirname + "/www"));
 
  app.set('port', (process.env.PORT || 5000));
 
-
+ 
 
 app.options('/order', cors());
 
@@ -47,10 +47,12 @@ app.options('/order', cors());
              done();
              if (err) {
                  console.error(err);
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
                  response.status(200).end();
@@ -81,7 +83,7 @@ app.options('/order', cors());
               if(err){
                 console.error(err);
                 response.send(err);
-                response.status(400).end();
+                response.status(400).end(); 
               }else{
                 response.contentType('application/json');
                 response.send(JSON.stringify(result.rows));
@@ -133,7 +135,7 @@ app.options('/order', cors());
                  console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden");
                  response.status(400).end();
              } else {
-                response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                response.header("Access-Control-Allow-Origin: http://localhost:8100");
                 //response.render('pages/db', {results: result.rows};
                 response.status(201).end();
                 //console.log(result.rows[0].id_orden);
@@ -158,7 +160,7 @@ app.options('/order', cors());
                                      console.log("success" + j);
                                      response.contentType('application/json');
                                      //response.send(JSON.stringify(result.rows));
-                                     //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
                                      
                                      //response.send(JSON.stringify(result.rows));
                             }
@@ -190,6 +192,7 @@ app.options('/order', cors());
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
+                        res.header("Access-Control-Allow-Origin: http://localhost:8100");
                          res.send("existe");
                          res.status(200).end();
                      } else {
@@ -211,7 +214,7 @@ app.options('/order', cors());
                 console.error(err);
                 console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
-                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                res.header("Access-Control-Allow-Origin: http://localhost:8100");
                 res.status(201).end();
             }
          });
@@ -220,42 +223,40 @@ app.options('/order', cors());
 
 //var client2= new pg.Client(process.env.DATABASE_URL);
 app.post('/historialOrdenes', function(req, res) {
-    //var client ;
     var client= new pg.Client(process.env.DATABASE_URL);
-     //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.connect(function(err,done) {
+         client.connect(function(err) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
-          var query = client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
+          client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
-        async.each(projects.rows,
-            function(projectRow, cb) { // called once for each project row
-                client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
-                  if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
-                  projectRow.comidas = result.rows;
-                  cb(null); // no error, continue with next projectRow, if any
-                });
-              }
+        async.each(projects.rows, 
+        function(projectRow, cb) { // called once for each project row
+            client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre, C.precio from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
+                //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
+              if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
+              projectRow.comidas = result.rows;
+              cb(null); // no error, continue with next projectRow, if any
+            });
+          }
 
         , function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
+          res.header("Access-Control-Allow-Origin: http://localhost:8100");
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
         });
         client.end();
       });
-    //query.on('end', function() { client.end(); });
-    });
- //client.done();
-    //client.end();
-     //});
- });
+
+     });
+ });    
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
-    client2.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
+    client2.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre, C.precio from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
+        //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
