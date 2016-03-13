@@ -192,7 +192,7 @@ app.options('/order', cors());
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
-                        resheader("Access-Control-Allow-Origin: http://localhost:8100");
+                        res.header("Access-Control-Allow-Origin: http://localhost:8100");
                          res.send("existe");
                          res.status(200).end();
                      } else {
@@ -214,7 +214,7 @@ app.options('/order', cors());
                 console.error(err);
                 console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
             }else{
-                resheader("Access-Control-Allow-Origin: http://localhost:8100");
+                res.header("Access-Control-Allow-Origin: http://localhost:8100");
                 res.status(201).end();
             }
          });
@@ -234,7 +234,7 @@ app.post('/historialOrdenes', function(req, res) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
-          resheader("Access-Control-Allow-Origin: http://localhost:8100");
+          res.header("Access-Control-Allow-Origin: http://localhost:8100");
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
