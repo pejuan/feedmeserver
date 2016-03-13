@@ -51,6 +51,7 @@ app.options('/order', cors());
                  response.status(400).end();
              } else {
                  //response.render('pages/db', {results: result.rows} ); 
+                  response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
                  response.status(200).end();
@@ -81,7 +82,7 @@ app.options('/order', cors());
               if(err){
                 console.error(err);
                 response.send(err);
-                response.status(400).end();
+                response.status(400).end(); 
               }else{
                 response.contentType('application/json');
                 response.send(JSON.stringify(result.rows));
@@ -158,7 +159,7 @@ app.options('/order', cors());
                                      console.log("success" + j);
                                      response.contentType('application/json');
                                      //response.send(JSON.stringify(result.rows));
-                                     //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                                      
                                      //response.send(JSON.stringify(result.rows));
                             }
@@ -190,6 +191,7 @@ app.options('/order', cors());
             }else{
                 if (result.rows.length > 0) {
                          //res.redirect('/registry');
+                        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                          res.send("existe");
                          res.status(200).end();
                      } else {
@@ -231,6 +233,7 @@ app.post('/historialOrdenes', function(req, res) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
+           res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
