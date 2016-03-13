@@ -220,8 +220,8 @@ app.options('/order', cors());
 
 //var client;
 app.post('/historialOrdenes', function(req, res) {
-    var client = new pg.Client(process.env.DATABASE_URL);
-     //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    //var client = new pg.Client(process.env.DATABASE_URL);
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.connect(function(err) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
@@ -238,7 +238,7 @@ app.post('/historialOrdenes', function(req, res) {
       });
     });
     client.end();
-    // });
+     });
  });
 
 var addComidasToOrden = function(projectRow, cb, client) { // called once for each project row
