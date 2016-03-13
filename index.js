@@ -223,8 +223,9 @@ app.options('/order', cors());
 
 //var client2= new pg.Client(process.env.DATABASE_URL);
 app.post('/historialOrdenes', function(req, res) {
-    var client= new pg.Client(process.env.DATABASE_URL);
-         client.connect(function(err) {
+        //var client= new pg.Client(process.env.DATABASE_URL);
+         //client.connect(function(err) {
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
           client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
@@ -243,12 +244,13 @@ app.post('/historialOrdenes', function(req, res) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
+          done();
           res.header("Access-Control-Allow-Origin: http://localhost:8100");
           res.contentType('application/json');
           res.send(JSON.stringify(projects.rows));
           res.status(200).end();
         });
-        client.end();
+        //client.end();
       });
 
      });
