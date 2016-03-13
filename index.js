@@ -225,7 +225,7 @@ app.post('/historialOrdenes', function(req, res) {
      //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.connect(function(err) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
-          client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
+          var query = client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
         async.each(projects.rows,
@@ -246,8 +246,9 @@ app.post('/historialOrdenes', function(req, res) {
           res.status(200).end();
         });
       });
+    query.on('end', function() { client.end(); });
     });
-    client.end();
+    //client.end();
      //});
  });
 
