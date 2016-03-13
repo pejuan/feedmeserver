@@ -218,16 +218,25 @@ app.options('/order', cors());
      });
  });
 
-var client2= new pg.Client(process.env.DATABASE_URL);
+//var client2= new pg.Client(process.env.DATABASE_URL);
 app.post('/historialOrdenes', function(req, res) {
     //var client ;
-     //pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client2.connect(function(err) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.connect(function(err) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
-          client2.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
+          client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
-        async.each(projects.rows, addComidasToOrden, function(err) {
+        async.each(projects.rows,
+            function(projectRow, cb) { // called once for each project row
+                client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
+                  if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
+                  projectRow.comidas = result.rows;
+                  cb(null); // no error, continue with next projectRow, if any
+                });
+              };
+
+        , function(err) {
           if (err) return console.error("error2"+err);
           // all project rows have been handled now
           //console.log(projects.rows);
@@ -236,14 +245,13 @@ app.post('/historialOrdenes', function(req, res) {
           res.status(200).end();
         });
       });
-    //});
+    });
     //client.end();
      });
  });
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client2.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
-        //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
       if(err) return cb("erro3"+err); // let Async know there was an error. Further processing will stop
       projectRow.comidas = result.rows;
       cb(null); // no error, continue with next projectRow, if any
