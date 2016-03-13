@@ -234,7 +234,7 @@ app.post('/historialOrdenes', function(req, res) {
                   projectRow.comidas = result.rows;
                   cb(null); // no error, continue with next projectRow, if any
                 });
-              };
+              }
 
         , function(err) {
           if (err) return console.error("error2"+err);
