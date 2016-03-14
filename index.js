@@ -125,7 +125,7 @@ app.post('/comida/create',function(request, response) {
          var sql = { query: 'INSERT INTO', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
          //sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"request.body.descript+"\'","\'"request.body.category+"\'","\'"request.body.foto+"\'",0,'usuario1'];
             sql.values = ['DEFAULT','Quesoburguesa',23,"Rica","Almuerzo","none.png",0,"usuario1"];
-             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")",function(err,result){
+             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")"+"RETURNING id_comida",function(err,result){
                  done();
                  if (err) {
                      response.send(err);
