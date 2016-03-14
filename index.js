@@ -92,6 +92,27 @@ app.options('/order', cors());
             });
         });  
  });
+ app.post('/comida_create',function(request, response) {
+     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
+         var sql = { query: 'INSERT INTO', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
+         //sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"request.body.descript+"\'","\'"request.body.category+"\'","\'"request.body.foto+"\'",0,'usuario1'];
+            sql.values = ['DEFAULT','Quesoburguesa',23,"Rica","Almuerzo","none.png",0,"usuario1"];
+             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")",function(err,result){
+                 console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
+                 done();
+                 if (err) {
+                     response.send(err);
+                     response.status(400).end();
+                 }else{
+                     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                     //response.render('pages/db', {results: result.rows};
+                     response.status(201).end();
+                     console.log("Done");
+                     response.contentType('application/json');
+                 }
+             }); 
+     });
+ });
 
  app.get('/comidas_cliente', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
@@ -120,26 +141,7 @@ app.options('/order', cors());
  });*/
  
  
-app.post('/comida/create',function(request, response) {
-     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
-         var sql = { query: 'INSERT INTO', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
-         //sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"request.body.descript+"\'","\'"request.body.category+"\'","\'"request.body.foto+"\'",0,'usuario1'];
-            sql.values = ['DEFAULT','Quesoburguesa',23,"Rica","Almuerzo","none.png",0,"usuario1"];
-             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")"+"RETURNING id_comida",function(err,result){
-                 done();
-                 if (err) {
-                     response.send(err);
-                     response.status(400).end();
-                 }else{
-                     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                     //response.render('pages/db', {results: result.rows};
-                     response.status(201).end();
-                     console.log("Done");
-                     response.contentType('application/json');
-                 }
-             }); 
-     });
- });
+
  app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
