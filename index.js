@@ -109,7 +109,7 @@ app.options('/order', cors());
          });
      });
  });
- app.post('/restaurante',function(request, response) {
+ /*app.post('/restaurante',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO', table: 'Restaurante', columns: ['id_usuario', 'contrasena', 'nom_restaurante']}
          //var user = params[:id_usuario];
@@ -117,19 +117,19 @@ app.options('/order', cors());
          //var name = params[:nom_restaurante];
          client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ "VALUES ("+request.body.id_usuario+","+request.body.contrasena+","+request.body.nom_restaurante)
      });
- });
+ });*/
  
  
- app.post('/comida',function(request, response) {
+/* app.post('/comida',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
-         sql.values = [request.body.idFood, "\'"+request.body.name+"\'",request.body.price,"\'"request.body.descript+"\'","\'"request.body.picture+"\'",0,"usuario1"];
+         sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"request.body.descript+"\'","\'"request.body.category+"\'","\'"request.body.picture+"\'",0,"usuario1"];
             
-             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden" ,function(err,result){
+             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")",function(err,result){
                  done();
                  if (err) {
                      response.send(err);
-                     console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_comida");
+                     //console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_comida");
                      response.status(400).end();
                  }else{
                      response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -140,7 +140,7 @@ app.options('/order', cors());
                  }
              }); 
          });
- });
+ });*/
  app.post('/order',function(request, response) {
 
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
