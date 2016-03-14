@@ -101,6 +101,7 @@ app.options('/order', cors());
                  console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
                  done();
                  if (err) {
+                     console.log(err);
                      response.send(err);
                      response.status(400).end();
                  }else{
