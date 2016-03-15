@@ -105,11 +105,12 @@ app.options('/order', cors());
                      response.send(err);
                      response.status(400).end();
                  }else{
-                     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                    //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                      //response.render('pages/db', {results: result.rows};
+                     response.contentType('application/json');
                      response.status(201).end();
                      console.log("Done");
-                     response.contentType('application/json');
+                     
                  }
              }); 
      });
