@@ -92,6 +92,7 @@ app.options('/order', cors());
             });
         });  
  });
+
  app.post('/comida_create',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
@@ -106,7 +107,7 @@ app.options('/order', cors());
                      response.status(400).end();
                  }else{
                     //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                     //response.render('pages/db', {results: result.rows};
+                     //response.render('pages/db', {results: result.rows};hero
                      response.contentType('application/json');
                      response.status(201).end();
                      console.log("Done");
@@ -115,7 +116,22 @@ app.options('/order', cors());
              }); 
      });
  });
-
+app.get('/restaurantes',function(request, response) {
+    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+        client.query("SELECT * from Restaurante",function(err,result){
+            done();
+            if(err){
+                console.error(err);
+                response.send("Error type "+ err);
+                response.status(400).end()
+            }else{
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+            }
+        });
+    });
+});
  app.get('/comidas_cliente', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT C.nombre, C.precio, O.id_orden, R.tiempo FROM Comida C join comida_pertenece_orden O on O.id_comida = C.id_comida join Orden R on R.id_orden=O.id_orden",function(err, result){
