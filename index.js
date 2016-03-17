@@ -92,7 +92,28 @@ app.options('/order', cors());
             });
         });  
  });
-
+app.post('/restaurante_create', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
+        var sql = { query:'INSERT INTO ', table: 'restaurante', columns: ['id_usuario','contrasena','nom_restaurante']};
+        sql.values = ["\'"+request.body.id_usuario+"\'","\'"+request.body.contrasena+"\'", "\'"+request.body.nom_restaurante+"\'"];
+        client.query(sql.query+sql.table+" ("+ sql.columns.join(',')+") " + "VALUES (" + sql.values.join(',')+")",function(err,result){
+            console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+                 
+             }
+        });
+    });
+});
  app.post('/comida_create',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
@@ -132,6 +153,7 @@ app.get('/restaurantes',function(request, response) {
         });
     });
 });
+
  app.get('/comidas_cliente', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT C.nombre, C.precio, O.id_orden, R.tiempo FROM Comida C join comida_pertenece_orden O on O.id_comida = C.id_comida join Orden R on R.id_orden=O.id_orden",function(err, result){
