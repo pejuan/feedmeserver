@@ -170,15 +170,26 @@ app.get('/restaurantes',function(request, response) {
          });
      });
  });
- /*app.post('/restaurante',function(request, response) {
+ app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'INSERT INTO', table: 'Restaurante', columns: ['id_usuario', 'contrasena', 'nom_restaurante']}
-         //var user = params[:id_usuario];
-         //var pass = params[:contrasena];
-         //var name = params[:nom_restaurante];
-         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ "VALUES ("+request.body.id_usuario+","+request.body.contrasena+","+request.body.nom_restaurante)
+         
+         client.query("UPDATE Orden O SET estado = E WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+                 
+             }
+         });
      });
- });*/
+ });
  
  
 
