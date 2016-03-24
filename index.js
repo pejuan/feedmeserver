@@ -194,7 +194,7 @@ app.get('/restaurantes',function(request, response) {
  app.post('/ordenAceptada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          
-         client.query("UPDATE Orden O SET estado = A WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
                      console.log(err);
