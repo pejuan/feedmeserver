@@ -189,6 +189,7 @@ app.get('/restaurantes',function(request, response) {
                      response.send(err);
                      response.status(400).end();
              }else{
+                pusher.trigger('order', 'updated', result.rows);
                 //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                  //response.render('pages/db', {results: result.rows};hero
                  response.contentType('application/json');
@@ -203,7 +204,7 @@ app.get('/restaurantes',function(request, response) {
  app.post('/ordenAceptada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          
-         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+", tiempo = "+"\'"+"DEFAULT"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -232,6 +233,7 @@ app.get('/restaurantes',function(request, response) {
                      response.send(err);
                      response.status(400).end();
              }else{
+                pusher.trigger('order', 'updated', result.rows);
                 //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                  //response.render('pages/db', {results: result.rows};hero
                  response.contentType('application/json');
@@ -253,6 +255,7 @@ app.post('/ordenLista',function(request, response) {
                      response.send(err);
                      response.status(400).end();
              }else{
+                pusher.trigger('order', 'updated', result.rows);
                 //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                  //response.render('pages/db', {results: result.rows};hero
                  response.contentType('application/json');
