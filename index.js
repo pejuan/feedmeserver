@@ -170,10 +170,11 @@ app.get('/restaurantes',function(request, response) {
          });
      });
  });
- app.post('/ordenEntregada',function(request, response) {
+
+  app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          
-         client.query("UPDATE Orden O SET estado = E WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"E"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -190,11 +191,53 @@ app.get('/restaurantes',function(request, response) {
          });
      });
  });
- 
+
  app.post('/ordenAceptada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          
          client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+                 
+             }
+         });
+     });
+ });
+
+  app.post('/ordenDenegada',function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         
+         client.query("UPDATE Orden O SET estado = "+"\'"+"D"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+                 
+             }
+         });
+     });
+ });
+
+app.post('/ordenLista',function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         
+         client.query("UPDATE Orden O SET estado = "+"\'"+"L"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
                      console.log(err);
