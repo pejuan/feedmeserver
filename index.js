@@ -372,8 +372,8 @@ app.post('/historialOrdenes', function(req, res) {
         //var client= new pg.Client(process.env.DATABASE_URL);
          //client.connect(function(err) {
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"};
-          client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
+        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'", order: ' order by O.tiempo desc'};
+          client.query(sql.query + sql.table + sql.join+sql.where+sql.order, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
         async.each(projects.rows, 
@@ -416,8 +416,8 @@ app.post('/ordenesPendientes', function(req, res) {
          //client.connect(function(err) {
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , 
-            where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"+' AND (O.estado= '+"\'"+"N"+"\'"+' or O.estado= '+"\'"+"A"+"\'"+' or O.estado= '+"\'"+"L"+"\'"+')'};
-          client.query(sql.query + sql.table + sql.join+sql.where, function(err, projects) {
+            where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"+' AND (O.estado= '+"\'"+"N"+"\'"+' or O.estado= '+"\'"+"A"+"\'"+' or O.estado= '+"\'"+"L"+"\'"+')', order: ' order by O.tiempo desc'};
+          client.query(sql.query + sql.table + sql.join+sql.where+sql.order, function(err, projects) {
         console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
         async.each(projects.rows, 
