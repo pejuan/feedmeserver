@@ -10,11 +10,11 @@
 
 
 var pusher = new Pusher({
-  appId: '12345',
-  key: 'some key',
-  secret: 'my secret... shhh!!!'
+  appId: '190924',
+  key: '29e2aed6161f8495e5b7',
+  secret: 'b0bffad8c69cbff77145',
+  encrypted: true
 });
-
 
  app.use(cors());
 
