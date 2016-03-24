@@ -281,7 +281,7 @@ app.post('/ordenLista',function(request, response) {
              } else {
                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
                 response.contentType('application/json');
-                res.send(JSON.stringify(result.rows));
+                response.send(JSON.stringify(result.rows));
                 //response.render('pages/db', {results: result.rows};
                 response.status(201).end();
                 //console.log(result.rows[0].id_orden);
