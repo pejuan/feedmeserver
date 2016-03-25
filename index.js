@@ -122,6 +122,32 @@ app.post('/restaurante_create', function(request, response) {
         });
     });
 });
+app.post('/loginRestaurante', function(req, res) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         var sql = { query: 'SELECT * FROM ', table: 'Restaurante', where: ' where id_usuario = '+"\'"+req.body.id_usuario+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
+         client.query(sql.query + sql.table + sql.where, function(err, result){
+            done();
+            if(err){
+                console.error(err);
+                console.log(sql.query + sql.table + sql.where);
+            }else{
+                if (result.rows.length > 1) {
+                    console.log("ERROR. EXISTE MAS DE UNO");
+                    res.status(401).end();
+                    
+                }else if(result.rows.length > 0){
+                    res.header("Access-Control-Allow-Origin: http://localhost:8100");
+                    res.send("existe");
+                    res.status(200).end();
+                    
+                } else {
+                    console.log("No existe");
+                    res.status(401).end();
+                }
+            }
+         });
+     });
+ });
  app.post('/comida_create',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
