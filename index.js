@@ -23,7 +23,7 @@ var pusher = new Pusher({
 
  app.set('port', (process.env.PORT || 5000));
 
- 
+
 
 app.options('/order', cors());
 
@@ -40,7 +40,7 @@ app.options('/order', cors());
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
-                 //response.render('pages/db', {results: result.rows} ); 
+                 //response.render('pages/db', {results: result.rows} );
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
                  response.status(200).end();
@@ -59,7 +59,7 @@ app.options('/order', cors());
                  response.send("Error " + err);
                  response.status(400).end();
              } else {
-                 //response.render('pages/db', {results: result.rows} ); 
+                 //response.render('pages/db', {results: result.rows} );
                  response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.contentType('application/json');
                  response.send(JSON.stringify(result.rows));
@@ -91,18 +91,18 @@ app.options('/order', cors());
               if(err){
                 console.error(err);
                 response.send(err);
-                response.status(400).end(); 
+                response.status(400).end();
               }else{
                 response.contentType('application/json');
                 response.send(JSON.stringify(result.rows));
                 response.status(200).end();
               }
             });
-        });  
+        });
  });
 app.post('/restaurante_create', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
-        var sql = { query:'INSERT INTO ', table: 'restaurante', columns: ['id_usuario','contrasena','nom_restaurante']};
+        var sql = { query:'INSERT INTO ', table: 'Restaurante', columns: ['id_usuario','contrasena','nom_restaurante']};
         sql.values = ["\'"+request.body.id_usuario+"\'","\'"+request.body.contrasena+"\'", "\'"+request.body.nom_restaurante+"\'"];
         client.query(sql.query+sql.table+" ("+ sql.columns.join(',')+") " + "VALUES (" + sql.values.join(',')+")",function(err,result){
             console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
@@ -117,7 +117,7 @@ app.post('/restaurante_create', function(request, response) {
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
-                 
+
              }
         });
     });
@@ -134,12 +134,12 @@ app.post('/loginRestaurante', function(req, res) {
                 if (result.rows.length > 1) {
                     console.log("ERROR. EXISTE MAS DE UNO");
                     res.status(401).end();
-                    
+
                 }else if(result.rows.length > 0){
                     res.header("Access-Control-Allow-Origin: http://localhost:8100");
                     res.send("existe");
                     res.status(200).end();
-                    
+
                 } else {
                     console.log("No existe");
                     res.status(401).end();
@@ -166,9 +166,9 @@ app.post('/loginRestaurante', function(req, res) {
                      response.contentType('application/json');
                      response.status(201).end();
                      console.log("Done");
-                     
+
                  }
-             }); 
+             });
      });
  });
 app.get('/restaurantes',function(request, response) {
@@ -207,7 +207,7 @@ app.get('/restaurantes',function(request, response) {
 
   app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         
+
          client.query("UPDATE Orden O SET estado = "+"\'"+"E"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
@@ -221,7 +221,7 @@ app.get('/restaurantes',function(request, response) {
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
-                 
+
              }
          });
      });
@@ -229,7 +229,7 @@ app.get('/restaurantes',function(request, response) {
 
  app.post('/ordenAceptada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         
+
          client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
@@ -244,7 +244,7 @@ app.get('/restaurantes',function(request, response) {
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
-                 
+
              }
          });
      });
@@ -252,7 +252,7 @@ app.get('/restaurantes',function(request, response) {
 
   app.post('/ordenDenegada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         
+
          client.query("UPDATE Orden O SET estado = "+"\'"+"D"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
@@ -266,7 +266,7 @@ app.get('/restaurantes',function(request, response) {
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
-                 
+
              }
          });
      });
@@ -274,7 +274,7 @@ app.get('/restaurantes',function(request, response) {
 
 app.post('/ordenLista',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         
+
          client.query("UPDATE Orden O SET estado = "+"\'"+"L"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'",function(err,result){
              done();
              if (err) {
@@ -288,12 +288,12 @@ app.post('/ordenLista',function(request, response) {
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
-                 
+
              }
          });
      });
  });
- 
+
 
  app.post('/order',function(request, response) {
 
@@ -301,7 +301,7 @@ app.post('/ordenLista',function(request, response) {
          var sql = { query: 'INSERT INTO ', table: 'Orden', columns: ['id_orden', 'id_restaurante','estado','id_cliente','ispaid'] };
 
          sql.values = ['DEFAULT', "\'"+request.body.idRestaurant+"\'","\'N\'","\'"+request.body.id_cliente+"\'",'false'];
-   		
+
          client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")" + "RETURNING id_orden" , function(err, result) {
              done();
              if (err) {
@@ -316,7 +316,7 @@ app.post('/ordenLista',function(request, response) {
                 response.status(201).end();
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
-                 //console.log(result.rows.id_orden);                  
+                 //console.log(result.rows.id_orden);
                  for (var j = 0; j < request.body.foods.length; j++) {
                      sql.values = ["\'"+result.rows[0].id_orden+"\'", "\'"+request.body.foods[j].idFood +"\'"];
                      sql.columns = ["id_orden", "id_comida"];
@@ -332,12 +332,12 @@ app.post('/ordenLista',function(request, response) {
                                  response.status(400).end();
                              } else {
                                  //response.render('pages/db', {results: result.rows} );
-                                 
+
                                      console.log("success" + j);
                                      response.contentType('application/json');
                                      //response.send(JSON.stringify(result.rows));
                                      response.header("Access-Control-Allow-Origin: http://localhost:8100");
-                                     
+
                                      //response.send(JSON.stringify(result.rows));
                             }
                          }
@@ -406,7 +406,7 @@ app.post('/historialOrdenes', function(req, res) {
           client.query(sql.query + sql.table + sql.join+sql.where+sql.order, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
-        async.each(projects.rows, 
+        async.each(projects.rows,
         function(projectRow, cb) { // called once for each project row
             client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre, C.precio from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
                 //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
@@ -430,7 +430,7 @@ app.post('/historialOrdenes', function(req, res) {
       });
 
      });
- });    
+ });
 
 var addComidasToOrden = function(projectRow, cb) { // called once for each project row
     client2.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre, C.precio from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
@@ -445,12 +445,12 @@ app.post('/ordenesPendientes', function(req, res) {
         //var client= new pg.Client(process.env.DATABASE_URL);
          //client.connect(function(err) {
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , 
+        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' ,
             where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"+' AND (O.estado= '+"\'"+"N"+"\'"+' or O.estado= '+"\'"+"A"+"\'"+' or O.estado= '+"\'"+"L"+"\'"+')', order: ' order by O.tiempo desc'};
           client.query(sql.query + sql.table + sql.join+sql.where+sql.order, function(err, projects) {
         console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
-        async.each(projects.rows, 
+        async.each(projects.rows,
         function(projectRow, cb) { // called once for each project row
             client.query('select CO.id,CO.id_orden,CO.id_comida,C.nombre, C.precio from Comida_pertenece_orden CO inner join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'" , function(err, result) {
                 //console.log('select CO.id,CO.id_orden,CO.id_comida,C.nombre from Comida_pertenece_orden CO join Comida C on C.id_comida = CO.id_comida where CO.id_orden= '+"\'"+projectRow.id_orden+"\'");
@@ -474,5 +474,4 @@ app.post('/ordenesPendientes', function(req, res) {
       });
 
      });
- }); 
-
+ });
