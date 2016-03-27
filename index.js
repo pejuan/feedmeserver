@@ -208,7 +208,7 @@ app.get('/restaurantes',function(request, response) {
   app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-         client.query("UPDATE Orden O SET estado = "+"\'"+"E"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"E"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -310,7 +310,7 @@ app.post('/ModificarComida',function(request, response) {
   app.post('/ordenDenegada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-         client.query("UPDATE Orden O SET estado = "+"\'"+"D"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"D"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -355,7 +355,7 @@ app.post('/ordenCancelada',function(request, response) {
 app.post('/ordenLista',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-         client.query("UPDATE Orden O SET estado = "+"\'"+"L"+"\'"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"L"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
