@@ -284,7 +284,29 @@ app.get('/restaurantes',function(request, response) {
          });
      });
  });
+app.post('/ModificarComida',function(request, response) {
+     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
+         var sql = { query: 'UPDATE Comida C SET ', table: 'Comida', columns: ['nombre','precio','descripcion','categoria','foto']};
+         sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"+request.body.descript+"\'","\'"+request.body.category+"\'","\'"+request.body.foto+"\'",0,"'usuario1'"];
+            //sql.values = ['DEFAULT',"'Quesoburguesa'",23,"'Rica'","'A'","'none.png'",0,"'usuario1'"];
+             client.query("UPDATE Comida C SET nombre = "+"\'"+request.body.nombre+"\'"+", precio = "+request.body.precio+", descripcion = "+"\'"+request.body.descripcion+"\'"+", categoria = "+"\'"+request.body.categoria+"\'"+", foto = "+"\'"+request.body.foto+"\'"+" WHERE id_comida = "+request.body.id_comida,function(err,result){
+                 console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
+                 done();
+                 if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+                 }else{
+                    //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                     //response.render('pages/db', {results: result.rows};hero
+                     response.contentType('application/json');
+                     response.status(201).end();
+                     console.log("Done");
 
+                 }
+             });
+     });
+ });
   app.post('/ordenDenegada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
