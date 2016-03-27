@@ -227,6 +227,41 @@ app.get('/restaurantes',function(request, response) {
      });
  });
 
+ app.post('/EliminarComida',function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+
+         client.query("DELETE FROM Comida where id_comida = "+request.body.id_comida,function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                client.query("DELETE FROM Comida_pertenece_orden WHERE id_comida = "+request.body.id_comida,function(err2,result){
+                     done();
+                     if (err2) {
+                             console.log(err);
+                             response.send(err);
+                             response.status(400).end();
+                     }else{
+                        pusher.trigger('order', 'updated', result.rows);
+                        //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                         //response.render('pages/db', {results: result.rows};hero
+                         response.contentType('application/json');
+                         response.status(201).end();
+                         console.log("Done");
+        
+                     }
+                 });
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+         });
+     });
+ });
+
  app.post('/ordenAceptada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
