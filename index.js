@@ -137,7 +137,7 @@ app.post('/loginRestaurante', function(req, res) {
 
                 }else if(result.rows.length > 0){
                     res.header("Access-Control-Allow-Origin: http://localhost:8100");
-                    res.send("existe");
+                    //res.send("existe");
                     res.status(200).end();
 
                 } else {
