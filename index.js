@@ -190,7 +190,7 @@ app.get('/restaurantes',function(request, response) {
 
  app.get('/comidas_cliente', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query("SELECT C.nombre, C.precio, O.id_orden, R.tiempo, R.estado FROM Comida C join comida_pertenece_orden O on O.id_comida = C.id_comida join Orden R on R.id_orden=O.id_orden ",function(err, result){
+         client.query("SELECT C.nombre, C.precio, O.id_orden, R.tiempo, R.estado FROM Comida C join comida_pertenece_orden O on O.id_comida = C.id_comida join Orden R on R.id_orden=O.id_orden group by O.id_orden",function(err, result){
            done();
            if(err){
              console.error(err);
