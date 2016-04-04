@@ -570,3 +570,24 @@ app.post('deleteOrder', function(req,res){
    });
 });
 
+app.post('/deleteOrder', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query('update Orden set borrado=true where id_orden = '+req.body.id,function(err,result){
+            console.log('update Orden set borrado=true where id_orden = '+req.body.id);
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
