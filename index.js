@@ -557,10 +557,11 @@ app.post('/ordenesPendientes', function(req, res) {
  });
 
 app.post('deleteOrder', function(req,res){
+    console.log("entra");
    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('update Orden set borrado=true where id_orden = '+req.body.id,function(err, rows){
         done();
-        if(err){
+        if(err){            
             res.status(400).end();
         }else{
             res.status(200).end();
