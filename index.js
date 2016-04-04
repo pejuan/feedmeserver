@@ -567,5 +567,5 @@ app.post('deleteOrder', function(req,res){
         }
     });
    });
-}):
+});
 
