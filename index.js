@@ -572,8 +572,8 @@ app.post('deleteOrder', function(req,res){
 
 app.post('/deleteOrder', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
-        client.query('update Orden set borrado=true where id_orden = '+req.body.id,function(err,result){
-            console.log('update Orden set borrado=true where id_orden = '+req.body.id);
+        client.query('update Orden set borrado=true where id_orden = '+request.body.id,function(err,result){
+            console.log('update Orden set borrado=true where id_orden = '+request.body.id);
              done();
              if (err) {
                  console.log(err);
