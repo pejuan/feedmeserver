@@ -171,6 +171,29 @@ app.post('/loginRestaurante', function(req, res) {
              });
      });
  });
+ app.post('/createDei',function(request, response) {
+     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
+         var sql = { query: 'INSERT INTO ', table: 'dei', columns: ['id','rtn','correo','cai','fecha_limite','restauranteid','facturas_recibidas','num_factura_actual']};
+         sql.values = ['DEFAULT', "\'"+request.body.rtn+"\'",request.body.correo,"\'"+request.body.cai+"\'","\'"+request.body.fecha_limite+"\'","\'"+request.body.restauranteid+"\'",request.body.facturas_recibidas,0];
+            //sql.values = ['DEFAULT',"'Quesoburguesa'",23,"'Rica'","'A'","'none.png'",0,"'usuario1'"];
+             client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")",function(err,result){
+                 console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
+                 done();
+                 if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+                 }else{
+                    //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                     //response.render('pages/db', {results: result.rows};hero
+                     response.contentType('application/json');
+                     response.status(201).end();
+                     console.log("Done");
+
+                 }
+             });
+     });
+ });
 app.get('/restaurantes',function(request, response) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         client.query("SELECT * from Restaurante",function(err,result){
