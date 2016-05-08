@@ -171,6 +171,7 @@ app.post('/loginRestaurante', function(req, res) {
              });
      });
  });
+ 
  app.post('/createDei',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'dei', columns: ['id','rtn','correo','cai','fecha_limite','restauranteid','facturas_recibidas','num_factura_actual']};
@@ -194,6 +195,25 @@ app.post('/loginRestaurante', function(req, res) {
              });
      });
  });
+ 
+ app.get('/dei', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query("SELECT * FROM dei",function(err, result){
+           done();
+           if(err){
+             console.error(err);
+             response.send("Error type " + err );
+             response.status(400).end();
+           }else{
+             response.contentType('application/json');
+             response.send(JSON.stringify(result.rows));
+             response.status(200).end();
+           }
+         });
+     });
+ });
+ 
+ 
 app.get('/restaurantes',function(request, response) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         client.query("SELECT * from Restaurante",function(err,result){
@@ -227,6 +247,7 @@ app.get('/restaurantes',function(request, response) {
          });
      });
  });
+
 
   app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
