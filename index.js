@@ -505,7 +505,7 @@ app.post('/historialOrdenes', function(req, res) {
         //var client= new pg.Client(process.env.DATABASE_URL);
          //client.connect(function(err) {
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'", order: ' order by O.tiempo desc'};
+        var sql = { query: 'SELECT R.nom_restaurante, O.id_orden, O.id_restaurante, O.estado, O.ispaid, O.tiempo, O.id_cliente FROM ', table: 'Orden O', join:' inner join Restaurante R on R.id_usuario=O.id_restaurante' , where: ' where O.id_cliente = '+"\'"+req.body.id_cliente+"\'"+"and O.borrado = false", order: ' order by O.tiempo desc'};
           client.query(sql.query + sql.table + sql.join+sql.where+sql.order, function(err, projects) {
             //console.log(sql.query + sql.table + sql.join+sql.where);
         if (err) return console.error("error1"+err);
@@ -578,3 +578,39 @@ app.post('/ordenesPendientes', function(req, res) {
 
      });
  });
+
+app.post('deleteOrder', function(req,res){
+    console.log("entra");
+   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    client.query('update Orden set borrado=true where id_orden = '+req.body.id,function(err, rows){
+        done();
+        if(err){            
+            res.status(400).end();
+        }else{
+            res.status(200).end();
+        }
+    });
+   });
+});
+
+app.post('/deleteOrder', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query('update Orden set borrado=true where id_orden = '+request.body.id,function(err,result){
+            console.log('update Orden set borrado=true where id_orden = '+request.body.id);
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
