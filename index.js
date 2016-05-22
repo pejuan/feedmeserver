@@ -652,8 +652,8 @@ app.post('/deleteOrder', function(request, response) {
 
 app.post('/sugerencia', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
-        client.query("insert into sugerencia values('DEFAULT',"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
-            console.log("insert into Sugerencia values('DEFAULT',"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")");
+        client.query("insert into sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
+            console.log("insert into Sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")");
              done();
              if (err) {
                  console.log(err);
