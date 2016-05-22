@@ -452,7 +452,7 @@ app.post('/ordenLista',function(request, response) {
                 response.contentType('application/json');
                 response.send(JSON.stringify(result.rows));
                 //response.render('pages/db', {results: result.rows};
-                response.status(201).end();
+                //response.status(201).end();
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
                  //console.log(result.rows.id_orden);
@@ -491,6 +491,8 @@ app.post('/ordenLista',function(request, response) {
                                  response.send("Error tercer query" + err3);
                                  response.status(400).end();
                              } else {
+                                if(j==request.body.foods.length-1)
+                                    response.status(201).end();
                                  //response.render('pages/db', {results: result.rows} );
 
                                      console.log("success" + j);
