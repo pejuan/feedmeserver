@@ -481,6 +481,27 @@ app.post('/ordenLista',function(request, response) {
                             }
                          }
                      });
+                     client.query("update Comida set veces_ordenada=veces_ordenada+1 where id_comida="+"\'"+request.body.foods[j].idFood +"\'", function(err3, result) {
+                         done();
+                         if(j == 0){
+                            console.log("entra " + j);
+                             if (err3) {
+                                console.error("update Comida set veces_ordenada=veces_ordenada+1 where id_comida="+"\'"+request.body.foods[j].idFood +"\'");
+                                 console.error(err3);
+                                 response.send("Error tercer query" + err3);
+                                 response.status(400).end();
+                             } else {
+                                 //response.render('pages/db', {results: result.rows} );
+
+                                     console.log("success" + j);
+                                     response.contentType('application/json');
+                                     //response.send(JSON.stringify(result.rows));
+                                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
+
+                                     //response.send(JSON.stringify(result.rows));
+                            }
+                         }
+                     });
                  }
 
              }
