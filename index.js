@@ -650,3 +650,41 @@ app.post('/deleteOrder', function(request, response) {
     });
 });
 
+app.post('/sugerencia', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query("insert into sugerencia values('DEFAULT',"+"\'"+req.body.sugerencia+"\',"+"\'"+req.body.id_cliente+"\'"+")",function(err,result){
+            console.log("insert into Sugerencia values('DEFAULT',"+"\'"+req.body.sugerencia+"\',"+"\'"+req.body.id_cliente+"\'"+")");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
+ app.get('/sugerencias', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT * FROM Sugerencia', function(err, result) {
+             done();
+             if (err) {
+                 console.error(err);
+                 response.send("Error " + err);
+                 response.status(400).end();
+             } else {
+                 //response.render('pages/db', {results: result.rows} );
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+             }
+         });
+     });
+ });
