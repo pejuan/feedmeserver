@@ -452,7 +452,7 @@ app.post('/ordenLista',function(request, response) {
                 response.contentType('application/json');
                 response.send(JSON.stringify(result.rows));
                 //response.render('pages/db', {results: result.rows};
-                response.status(201).end();
+                //response.status(201).end();
                 //console.log(result.rows[0].id_orden);
                  //response.render('pages/db', {results: result.rows} );
                  //console.log(result.rows.id_orden);
@@ -470,6 +470,29 @@ app.post('/ordenLista',function(request, response) {
                                  response.send("Error segundo query" + err);
                                  response.status(400).end();
                              } else {
+                                 //response.render('pages/db', {results: result.rows} );
+
+                                     console.log("success" + j);
+                                     response.contentType('application/json');
+                                     //response.send(JSON.stringify(result.rows));
+                                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
+
+                                     //response.send(JSON.stringify(result.rows));
+                            }
+                         }
+                     });
+                     client.query("update Comida set veces_ordenada=veces_ordenada+1 where id_comida="+"\'"+request.body.foods[j].idFood +"\'", function(err3, result) {
+                         done();
+                         if(j == 0){
+                            console.log("entra " + j);
+                             if (err3) {
+                                console.error("update Comida set veces_ordenada=veces_ordenada+1 where id_comida="+"\'"+request.body.foods[j].idFood +"\'");
+                                 console.error(err3);
+                                 response.send("Error tercer query" + err3);
+                                 response.status(400).end();
+                             } else {
+                                if(j==request.body.foods.length-1)
+                                    response.status(201).end();
                                  //response.render('pages/db', {results: result.rows} );
 
                                      console.log("success" + j);
@@ -650,3 +673,61 @@ app.post('/deleteOrder', function(request, response) {
     });
 });
 
+app.post('/sugerencia', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query("insert into sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
+            console.log("insert into Sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
+ app.get('/sugerencias', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT * FROM Sugerencia', function(err, result) {
+             done();
+             if (err) {
+                 console.error(err);
+                 response.send("Error " + err);
+                 response.status(400).end();
+             } else {
+                 //response.render('pages/db', {results: result.rows} );
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+             }
+         });
+     });
+ });
+
+ app.get('/topComidas', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario ORDER BY C.veces_ordenada DESC', function(err, result) {
+             done();
+             if (err) {
+                 console.error(err);
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.send("Error " + err);
+                 response.status(400).end();
+             } else {
+                 //response.render('pages/db', {results: result.rows} );
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+             }
+         });
+     });
+ });
