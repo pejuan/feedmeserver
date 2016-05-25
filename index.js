@@ -212,6 +212,28 @@ app.post('/loginRestaurante', function(req, res) {
          });
      });
  });
+ 
+ app.get('/deiRestauranteAuxiliar', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
+           done();
+           if(err){
+             console.error(err);
+             response.send("Error type " + err );
+             response.status(400).end();
+           }else{
+              
+             response.contentType('application/json');
+             response.send(JSON.stringify(result.rows));
+             response.status(200).end();
+             
+           }
+         });
+     });
+ });
+ 
+ 
+ 
   app.get('/deiRestaurante', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
