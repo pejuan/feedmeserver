@@ -714,7 +714,7 @@ app.post('/sugerencia', function(request, response) {
 
  app.get('/topComidas', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario ORDER BY C.veces_ordenada DESC', function(err, result) {
+         client.query('SELECT TOP 10 C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario ORDER BY C.veces_ordenada DESC', function(err, result) {
              done();
              if (err) {
                  console.error(err);
