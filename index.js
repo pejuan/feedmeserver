@@ -243,14 +243,14 @@ app.post('/loginRestaurante', function(req, res) {
              response.send("Error type " + err );
              response.status(400).end();
            }else{
-              client.query("UPDATE dei d SET num_factura_actual = (SELECT num_factura_actual FROM dei WHERE d.restauranteid ="+request.body.restauranteid +")+1"+ " WHERE d.restauranteid = "+request.body.restauranteid,function(err2,result){
+              client.query("UPDATE dei d SET num_factura_actual = (SELECT num_factura_actual FROM dei WHERE d.restauranteid ="+request.body.restauranteid +")+1"+ " WHERE d.restauranteid = "+request.body.restauranteid,function(err2,result2){
                      done();
                      if (err2) {
-                             console.log(err);
-                             response.send(err);
+                             console.log(err2);
+                             response.send(err2);
                              response.status(400).end();
                      }else{
-                        pusher.trigger('order', 'updated', result.rows);
+                        pusher.trigger('order', 'updated', result2.rows);
                         //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
                          //response.render('pages/db', {results: result.rows};hero
                          response.contentType('application/json');
