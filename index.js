@@ -221,7 +221,7 @@ app.post('/loginRestaurante', function(req, res) {
              response.send("Error type " + err );
              response.status(400).end();
            }else{
-             /* client.query("UPDATE dei d SET num_factura_actual = (SELECT num_factura_actual FROM dei WHERE d.restauranteid ="+request.body.restauranteid +")"+ " WHERE d.restauranteid = "+request.body.restauranteid,function(err2,result){
+              client.query("UPDATE dei d SET num_factura_actual = (SELECT num_factura_actual FROM dei WHERE d.restauranteid ="+request.body.restauranteid +")+1"+ " WHERE d.restauranteid = "+request.body.restauranteid,function(err2,result){
                      done();
                      if (err2) {
                              console.log(err);
@@ -236,7 +236,7 @@ app.post('/loginRestaurante', function(req, res) {
                          console.log("Done");
 
                      }
-             });*/
+             });
              response.contentType('application/json');
              response.send(JSON.stringify(result.rows));
              response.status(200).end();
