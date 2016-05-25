@@ -150,8 +150,8 @@ app.post('/loginRestaurante', function(req, res) {
  });
  app.post('/comida_create',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
-         var sql = { query: 'INSERT INTO ', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto2','veces_ordenada','id_restaurante']};
-         sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price,"\'"+request.body.descript+"\'","\'"+request.body.category+"\'","\'"+request.body.foto+"\'",0,"\'"+request.body.id_restaurante+"\'"];
+         var sql = { query: 'INSERT INTO ', table: 'Comida', columns: ['id_comida','nombre','precio','descripcion','categoria','foto','veces_ordenada','id_restaurante']};
+         sql.values = ['DEFAULT', "\'"+request.body.name+"\'",request.body.price+"\'"+request.body.descript+"\'","\'"+request.body.category+"\'","\'"+request.body.foto+"\'",0,"\'"+request.body.id_restaurante+"\'"];
             //sql.values = ['DEFAULT',"'Quesoburguesa'",23,"'Rica'","'A'","'none.png'",0,"'usuario1'"];
              client.query(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")",function(err,result){
                  console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
@@ -212,6 +212,28 @@ app.post('/loginRestaurante', function(req, res) {
          });
      });
  });
+ 
+ app.get('/deiRestauranteAuxiliar', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
+           done();
+           if(err){
+             console.error(err);
+             response.send("Error type " + err );
+             response.status(400).end();
+           }else{
+              
+             response.contentType('application/json');
+             response.send(JSON.stringify(result.rows));
+             response.status(200).end();
+             
+           }
+         });
+     });
+ });
+ 
+ 
+ 
   app.get('/deiRestaurante', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
@@ -221,9 +243,26 @@ app.post('/loginRestaurante', function(req, res) {
              response.send("Error type " + err );
              response.status(400).end();
            }else{
+              client.query("UPDATE dei d SET num_factura_actual = (SELECT num_factura_actual FROM dei WHERE d.restauranteid ="+request.body.restauranteid +")+1"+ " WHERE d.restauranteid = "+request.body.restauranteid,function(err2,result){
+                     done();
+                     if (err2) {
+                             console.log(err);
+                             response.send(err);
+                             response.status(400).end();
+                     }else{
+                        pusher.trigger('order', 'updated', result.rows);
+                        //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                         //response.render('pages/db', {results: result.rows};hero
+                         response.contentType('application/json');
+                         response.status(201).end();
+                         console.log("Done");
+
+                     }
+             });
              response.contentType('application/json');
              response.send(JSON.stringify(result.rows));
              response.status(200).end();
+             
            }
          });
      });
