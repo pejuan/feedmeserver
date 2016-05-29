@@ -890,7 +890,7 @@ app.post('/noMeGusta', function(request, response) {
                  console.log('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
             'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
-            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP'+ 
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
             'ON CR.id_comida= OP.id_comida');
                  response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
