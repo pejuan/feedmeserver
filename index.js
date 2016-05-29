@@ -780,7 +780,7 @@ app.post('/queja', function(request, response) {
 app.post('/meGusta', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
         client.query("SELECT * from Opinion O where O.id_comida="+"\'"+request.body.id_comida+"\', AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
-            console.log("");
+            console.log("SELECT * from Opinion O where O.id_comida="+"\'"+request.body.id_comida+"\', AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
              done();
              if (err) {
                  console.log(err);
