@@ -877,7 +877,7 @@ app.post('/noMeGusta', function(request, response) {
     });
 });
 
- app.post('/comidasCliente', function(request, response) {
+ app.post('/comidas', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
