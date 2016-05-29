@@ -779,8 +779,8 @@ app.post('/queja', function(request, response) {
 
 app.post('/meGusta', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
-        client.query("SELECT * from Opinion O where O.id_comida="+"\'"+request.body.id_comida+"\', AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
-            console.log("SELECT * from Opinion O where O.id_comida="+"\'"+request.body.id_comida+"\', AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
+        client.query("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
+            console.log("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
              done();
              if (err) {
                  console.log(err);
@@ -788,8 +788,8 @@ app.post('/meGusta', function(request, response) {
                  response.status(400).end();
              }else{
                 if(result.rows.length>0){
-                    client.query("update Opinion set opinion=TRUE WHERE id_comida="+"\'"+request.body.id_comida+"\' AND id_cliente="+"\'"+request.body.id_cliente+"\'",function(err2,result2){
-                        console.log("update Opinion set opinion=TRUE WHERE id_comida="+"\'"+request.body.id_comida+"\' AND id_cliente="+"\'"+request.body.id_cliente+"\'");
+                    client.query("update Opinion set opinion=TRUE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'",function(err2,result2){
+                        console.log("update Opinion set opinion=TRUE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'");
                          done();
                          if (err2) {
                              console.log(err2);
@@ -804,8 +804,8 @@ app.post('/meGusta', function(request, response) {
                          }
                     });
                 }else{
-                    client.query("insert into Opinion(id_comida,id_cliente,opinion) values("+"\'"+request.body.id_comida+"\',"+"\'"+request.body.id_cliente+"\'"+",TRUE)",function(err2,result2){
-                        console.log("insert into Opinion(id_comida,id_cliente,opinion) values("+"\'"+request.body.id_comida+"\',"+"\'"+request.body.id_cliente+"\'"+",TRUE)");
+                    client.query("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",TRUE)",function(err2,result2){
+                        console.log("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",TRUE)");
                          done();
                          if (err2) {
                              console.log(err2);
