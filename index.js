@@ -755,3 +755,74 @@ app.post('/sugerencia', function(request, response) {
          });
      });
  });
+
+app.post('/queja', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")",function(err,result){
+            console.log("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
+app.post('/meGusta', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
+        client.query("SELECT * from Opinion O where O.id_comida="+"\'"+request.body.id_comida+"\', AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
+            console.log("");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                if(result.rows.length>0){
+                    client.query("update Opinion set opinion=TRUE WHERE id_comida="+"\'"+request.body.id_comida+"\' AND id_cliente="+"\'"+request.body.id_cliente+"\'",function(err2,result2){
+                        console.log("update Opinion set opinion=TRUE WHERE id_comida="+"\'"+request.body.id_comida+"\' AND id_cliente="+"\'"+request.body.id_cliente+"\'");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }else{
+                    client.query("insert into Opinion(id_comida,id_cliente,opinion) values("+"\'"+request.body.id_comida+"\',"+"\'"+request.body.id_cliente+"\'"+",TRUE)",function(err2,result2){
+                        console.log("insert into Opinion(id_comida,id_cliente,opinion) values("+"\'"+request.body.id_comida+"\',"+"\'"+request.body.id_cliente+"\'"+",TRUE)");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }
+
+             }
+        });   
+        
+    });
+});
