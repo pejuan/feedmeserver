@@ -346,9 +346,31 @@ app.get('/restaurantes',function(request, response) {
  });
 
  app.post('/ordenAceptada',function(request, response) {
+    var random = Math.random();
+    if(random <0.8){
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query("UPDATE Orden O SET estado = "+"\'"+"R"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     console.log("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado');
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                pusher.trigger('order', 'updated', result.rows);
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(402).end();
+                 console.log("Done");
+
+             }
+         });
+     });
+    }else{
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT, ispaid=True"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -366,6 +388,7 @@ app.get('/restaurantes',function(request, response) {
              }
          });
      });
+    }
  });
 app.post('/ModificarComida',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
