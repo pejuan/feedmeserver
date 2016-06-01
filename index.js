@@ -347,7 +347,7 @@ app.get('/restaurantes',function(request, response) {
 
  app.post('/ordenAceptada',function(request, response) {
     var random = Math.random();
-    if(random <0.8){
+    if(random <0.2){
         pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("UPDATE Orden O SET estado = "+"\'"+"R"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
