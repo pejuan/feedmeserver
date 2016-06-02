@@ -288,6 +288,29 @@ app.get('/restaurantes',function(request, response) {
  });
 
 
+app.post('/incrementarNumeroDeFactura',function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+
+         client.query("UPDATE dei D SET num_factura_actual = (num_factura_actual+1)  WHERE D.restauranteid = " + "\'"+request.body.restauranteid+"\'" ,function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                //pusher.trigger('order', 'updated', result.rows);
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+         });
+     });
+ });
+
+
   app.post('/ordenEntregada',function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
