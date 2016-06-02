@@ -369,9 +369,31 @@ app.post('/incrementarNumeroDeFactura',function(request, response) {
  });
 
  app.post('/ordenAceptada',function(request, response) {
+    var random = Math.random();
+    if(random <0.2){
+        pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query("UPDATE Orden O SET estado = "+"\'"+"R"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+             done();
+             if (err) {
+                     console.log(err);
+                     console.log("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado');
+                     response.send(err);
+                     response.status(400).end();
+             }else{
+                pusher.trigger('order', 'updated', result.rows);
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(402).end();
+                 console.log("Done");
+
+             }
+         });
+     });
+    }else{
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 
-         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
+         client.query("UPDATE Orden O SET estado = "+"\'"+"A"+"\'"+" ,tiempo = DEFAULT, ispaid=True"+" WHERE O.id_orden = " + "\'"+request.body.id_orden+"\'"+' RETURNING O.id_orden,O.id_cliente,O.estado',function(err,result){
              done();
              if (err) {
                      console.log(err);
@@ -389,6 +411,7 @@ app.post('/incrementarNumeroDeFactura',function(request, response) {
              }
          });
      });
+    }
  });
 app.post('/ModificarComida',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
@@ -765,6 +788,156 @@ app.post('/sugerencia', function(request, response) {
              done();
              if (err) {
                  console.error(err);
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.send("Error " + err);
+                 response.status(400).end();
+             } else {
+                 //response.render('pages/db', {results: result.rows} );
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+             }
+         });
+     });
+ });
+
+app.post('/queja', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+        client.query("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")",function(err,result){
+            console.log("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                 //response.render('pages/db', {results: result.rows};hero
+                 response.contentType('application/json');
+                 response.status(201).end();
+                 console.log("Done");
+
+             }
+        });
+    });
+});
+
+app.post('/meGusta', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
+        client.query("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
+            console.log("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                if(result.rows.length>0){
+                    client.query("update Opinion set opinion=TRUE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'",function(err2,result2){
+                        console.log("update Opinion set opinion=TRUE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }else{
+                    client.query("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",TRUE)",function(err2,result2){
+                        console.log("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",TRUE)");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }
+
+             }
+        });   
+        
+    });
+});
+
+app.post('/noMeGusta', function(request, response) {
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
+        client.query("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
+            console.log("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
+             done();
+             if (err) {
+                 console.log(err);
+                 response.send(err);
+                 response.status(400).end();
+             }else{
+                if(result.rows.length>0){
+                    client.query("update Opinion set opinion=FALSE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'",function(err2,result2){
+                        console.log("update Opinion set opinion=FALSE WHERE id_comida="+""+request.body.id_comida+" AND id_cliente="+"\'"+request.body.id_cliente+"\'");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }else{
+                    client.query("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",FALSE)",function(err2,result2){
+                        console.log("insert into Opinion(id_comida,id_cliente,opinion) values("+""+request.body.id_comida+","+"\'"+request.body.id_cliente+"\'"+",FALSE)");
+                         done();
+                         if (err2) {
+                             console.log(err2);
+                             response.send(err2);
+                             response.status(400).end();
+                         }else{
+                            //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                             //response.render('pages/db', {results: result.rows};hero
+                             response.contentType('application/json');
+                             response.status(201).end();
+                             console.log("Done");
+                         }
+                    });
+                }
+
+             }
+        });   
+        
+    });
+});
+
+ app.post('/comidas', function(request, response) {
+     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
+            'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
+            'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            'ON CR.id_comida= OP.id_comida', function(err, result) {
+             done();
+             if (err) {
+                 console.error(err);
+                 console.log('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
+            'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
+            'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            'ON CR.id_comida= OP.id_comida');
                  response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
                  response.status(400).end();
