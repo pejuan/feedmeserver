@@ -1012,7 +1012,7 @@ app.post('/noMeGusta', function(request, response) {
 
 app.post('/comentariosComida', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query('SELECT * FROM Comentario where id_comida='+"\'"+request.body.id_comida+"\'", function(err, result) {
+         client.query('SELECT * FROM Comentario where id_comida='+request.body.id_comida, function(err, result) {
              done();
              if (err) {
                  console.error(err);
