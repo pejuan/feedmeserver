@@ -991,8 +991,8 @@ app.post('/noMeGusta', function(request, response) {
 
  app.post('/comentario', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
-        client.query("insert into Comentario(id,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
-            console.log("insert into Comentario(id,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")");
+        client.query("insert into Comentario(id_comentario,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
+            console.log("insert into Comentario(id_comentario,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")");
              done();
              if (err) {
                  console.log(err);
