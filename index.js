@@ -171,7 +171,7 @@ app.post('/loginRestaurante', function(req, res) {
              });
      });
  });
- 
+
  app.post('/createDei',function(request, response) {
      pg.connect(process.env.DATABASE_URL,function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'dei', columns: ['id','rtn','correo','cai','fecha_limite','restauranteid','facturas_recibidas','num_factura_actual']};
@@ -195,7 +195,7 @@ app.post('/loginRestaurante', function(req, res) {
              });
      });
  });
- 
+
  app.get('/dei', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT * FROM dei",function(err, result){
@@ -212,7 +212,7 @@ app.post('/loginRestaurante', function(req, res) {
          });
      });
  });
- 
+
  app.get('/deiRestauranteAuxiliar', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
@@ -222,18 +222,18 @@ app.post('/loginRestaurante', function(req, res) {
              response.send("Error type " + err );
              response.status(400).end();
            }else{
-              
+
              response.contentType('application/json');
              response.send(JSON.stringify(result.rows));
              response.status(200).end();
-             
+
            }
          });
      });
  });
- 
- 
- 
+
+
+
   app.get('/deiRestaurante', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query("SELECT * FROM dei d WHERE d.restauranteid = "+"\'"+request.body.restauranteid+"\'",function(err, result){
@@ -243,16 +243,16 @@ app.post('/loginRestaurante', function(req, res) {
              response.send("Error type " + err );
              response.status(400).end();
            }else{
-              
+
              response.contentType('application/json');
              response.send(JSON.stringify(result.rows));
              response.status(200).end();
-             
+
            }
          });
      });
  });
- 
+
 app.get('/restaurantes',function(request, response) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
         client.query("SELECT * from Restaurante",function(err,result){
@@ -713,7 +713,7 @@ app.post('deleteOrder', function(req,res){
    pg.connect(process.env.DATABASE_URL, function(err, client, done) {
     client.query('update Orden set borrado=true where id_orden = '+req.body.id,function(err, rows){
         done();
-        if(err){            
+        if(err){
             res.status(400).end();
         }else{
             res.status(200).end();
@@ -723,7 +723,7 @@ app.post('deleteOrder', function(req,res){
 });
 
 app.post('/deleteOrder', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query('update Orden set borrado=true where id_orden = '+request.body.id,function(err,result){
             console.log('update Orden set borrado=true where id_orden = '+request.body.id);
              done();
@@ -744,7 +744,7 @@ app.post('/deleteOrder', function(request, response) {
 });
 
 app.post('/sugerencia', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query("insert into sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
             console.log("insert into Sugerencia(id_sugerencia,sugerencia,id_cliente) values(DEFAULT,"+"\'"+request.body.sugerencia+"\',"+"\'"+request.body.id_cliente+"\'"+")");
              done();
@@ -820,7 +820,7 @@ app.post('/sugerencia', function(request, response) {
  });
 
 app.post('/queja', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")",function(err,result){
             console.log("insert into Queja(id,queja,restaurante) values(DEFAULT,"+"\'"+request.body.queja+"\',"+"\'"+request.body.restaurante+"\'"+")");
              done();
@@ -841,7 +841,7 @@ app.post('/queja', function(request, response) {
 });
 
 app.post('/meGusta', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
             console.log("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
              done();
@@ -885,13 +885,13 @@ app.post('/meGusta', function(request, response) {
                 }
 
              }
-        });   
-        
+        });
+
     });
 });
 
 app.post('/noMeGusta', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {    
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'",function(err,result){
             console.log("SELECT * from Opinion O where O.id_comida="+""+request.body.id_comida+" AND O.id_cliente="+"\'"+request.body.id_cliente+"\'");
              done();
@@ -935,8 +935,8 @@ app.post('/noMeGusta', function(request, response) {
                 }
 
              }
-        });   
-        
+        });
+
     });
 });
 
@@ -945,7 +945,7 @@ app.post('/noMeGusta', function(request, response) {
          client.query('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
             'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
-            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+
             'ON CR.id_comida= OP.id_comida', function(err, result) {
              done();
              if (err) {
@@ -953,7 +953,7 @@ app.post('/noMeGusta', function(request, response) {
                  console.log('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
             'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
-            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+
             'ON CR.id_comida= OP.id_comida');
                  response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
@@ -990,7 +990,7 @@ app.post('/noMeGusta', function(request, response) {
  });
 
  app.post('/comentario', function(request, response) {
-    pg.connect(process.env.DATABASE_URL,function(err, client, done) {        
+    pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         client.query("insert into Comentario(id_comentario,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")",function(err,result){
             console.log("insert into Comentario(id_comentario,id_comida,comentario,id_cliente) values(DEFAULT,"+"\'"+request.body.id_comida+"\',"+"\'"+request.body.comentario+"\',"+"\'"+request.body.id_cliente+"\'"+")");
              done();
@@ -1010,7 +1010,7 @@ app.post('/noMeGusta', function(request, response) {
     });
 });
 
-app.post('/comentariosComida', function(request, response) {
+app.get('/comentariosComida', function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query('SELECT * FROM Comentario where id_comida='+request.body.id_comida, function(err, result) {
              done();
@@ -1035,7 +1035,7 @@ app.post('/comentariosComida', function(request, response) {
          client.query('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
             'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
-            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+
             'ON CR.id_comida= OP.id_comida WHERE OP.opinion=True', function(err, result) {
              done();
              if (err) {
@@ -1043,7 +1043,7 @@ app.post('/comentariosComida', function(request, response) {
                  console.log('SELECT CR.id_comida,CR.foto2,CR.borrado,CR.nombre,CR.precio,CR.descripcion,CR.categoria,CR.foto,CR.veces_ordenada,CR.id_restaurante,CR.nom_restaurante ,OP.opinion '+
             'FROM (SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante '+
             'FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario)CR left join '+
-            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+ 
+            '(SELECT * from Opinion O where O.id_cliente = '+"\'"+request.body.id_cliente+"\'"+')OP '+
             'ON CR.id_comida= OP.id_comida WHERE OP.opinion=True');
                  response.header("Access-Control-Allow-Origin: http://localhost:8100");
                  response.send("Error " + err);
