@@ -616,11 +616,11 @@ app.post('/ordenLista',function(request, response) {
  app.post('/registrycliente', function(req, res) {
     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          var sql = { query: 'INSERT INTO ', table: 'Cliente', columns: ['correo', 'nombre', 'contrasena']};
-         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"\'md5("+req.body.contrasena+"\'"+"))", function(err, result){
+         client.query(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"md5(\'"+req.body.contrasena+"\'"+"))", function(err, result){
             done();
             if(err){
                 console.error(err);
-                console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+",md5("+req.body.contrasena+"))");
+                console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+"\'"+req.body.correo+"\'"+","+"\'"+req.body.nombre+"\'"+","+"\'md5("+req.body.contrasena+"\'"+"))");
             }else{
                 res.header("Access-Control-Allow-Origin: http://localhost:8100");
                 res.status(201).end();
