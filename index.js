@@ -591,7 +591,7 @@ app.post('/ordenLista',function(request, response) {
 
  app.post('/logincliente', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+"\'"+req.body.correo+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
+         var sql = { query: 'SELECT * FROM ', table: 'Cliente', where: ' where correo = '+"\'"+req.body.correo+"\'"+' AND contrasena = md5('+"\'"+req.body.contrasena+"\')"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
             done();
             if(err){
@@ -620,7 +620,7 @@ app.post('/ordenLista',function(request, response) {
             done();
             if(err){
                 console.error(err);
-                console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+","+req.body.contrasena+")");
+                console.log(sql.query + sql.table + " (" + sql.columns.join(',')+ ") "+ " VALUES ("+req.body.correo+","+req.body.nombre+",md5("+req.body.contrasena+"))");
             }else{
                 res.header("Access-Control-Allow-Origin: http://localhost:8100");
                 res.status(201).end();
