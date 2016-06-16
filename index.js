@@ -16,6 +16,10 @@ var pusher = new Pusher({
   encrypted: true
 });
 
+var corsOptions = {
+  origin: [/^https://feedmeclient\.herokuapp\.com/,/^https://feedme-restaurant\.herokuapp\.com/]
+};
+
  app.use(cors());
 
  app.use(bodyParser.json());
@@ -49,7 +53,7 @@ app.options('/order', cors());
      });
  });
 
- app.get('/comidas', function(request, response) {
+ app.get('/comidas',cors(corsOptions), function(request, response) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
          client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
              done();
