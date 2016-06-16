@@ -50,23 +50,29 @@ app.options('/order', cors());
  });
 
  app.get('/comidas', function(request, response) {
-     pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
-             done();
-             if (err) {
-                 console.error(err);
-                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
-                 response.send("Error " + err);
-                 response.status(400).end();
-             } else {
-                 //response.render('pages/db', {results: result.rows} );
-                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
-                 response.contentType('application/json');
-                 response.send(JSON.stringify(result.rows));
-                 response.status(200).end();
-             }
-         });
-     });
+     if(request.socket.remoteAddress !== '54.225.133.127'){
+
+     } else { 
+          // allow access
+          pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+             client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
+                 done();
+                 if (err) {
+                     console.error(err);
+                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                     response.send("Error " + err);
+                     response.status(400).end();
+                 } else {
+                     //response.render('pages/db', {results: result.rows} );
+                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                     response.contentType('application/json');
+                     response.send(JSON.stringify(result.rows));
+                     response.status(200).end();
+                 }
+             });
+        });
+     }
+     
  });
  app.get('/orders', function(request,response){
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
