@@ -17,7 +17,7 @@ var pusher = new Pusher({
 });
 
 var corsOptions = {
-  origin: [/^https://feedmeclient\.herokuapp\.com/,/^https://feedme-restaurant\.herokuapp\.com/]
+  origin: [/https://feedmeclient\.herokuapp\.com/*,/https://feedme-restaurant\.herokuapp\.com/*]
 };
 
  app.use(cors());
