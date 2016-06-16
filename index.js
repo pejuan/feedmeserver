@@ -50,9 +50,8 @@ app.options('/order', cors());
  });
 
  app.get('/comidas', function(request, response) {
-     if(request.socket.remoteAddress !== '54.225.133.127'){
+     if(request.socket.remoteAddress == '54.225.133.127' || request.socket.remoteAddress == '190.107.132.19'){
 
-     } else { 
           // allow access
           pg.connect(process.env.DATABASE_URL, function(err, client, done) {
              client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
