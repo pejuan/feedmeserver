@@ -16,10 +16,6 @@ var pusher = new Pusher({
   encrypted: true
 });
 
-var corsOptions = {
-  origin: [/https://feedmeclient\.herokuapp\.com/*,/https://feedme-restaurant\.herokuapp\.com/*]
-};
-
  app.use(cors());
 
  app.use(bodyParser.json());
