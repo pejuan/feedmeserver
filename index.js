@@ -50,27 +50,25 @@ app.options('/order', cors());
  });
 
  app.get('/comidas', function(request, response) {
-     if(request.socket.remoteAddress == '54.225.133.127' || request.socket.remoteAddress == '190.107.132.19'){
 
           // allow access
-          pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-             client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
-                 done();
-                 if (err) {
-                     console.error(err);
-                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
-                     response.send("Error " + err);
-                     response.status(400).end();
-                 } else {
-                     //response.render('pages/db', {results: result.rows} );
-                     response.header("Access-Control-Allow-Origin: http://localhost:8100");
-                     response.contentType('application/json');
-                     response.send(JSON.stringify(result.rows));
-                     response.status(200).end();
-                 }
-             });
-        });
-     }
+      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+         client.query('SELECT C.id_comida,C.foto2,C.borrado,C.nombre,C.precio,C.descripcion,C.categoria,C.foto,C.veces_ordenada,C.id_restaurante,R.nom_restaurante FROM Comida C join Restaurante R on C.id_restaurante=R.id_usuario', function(err, result) {
+             done();
+             if (err) {
+                 console.error(err);
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.send("Error " + err);
+                 response.status(400).end();
+             } else {
+                 //response.render('pages/db', {results: result.rows} );
+                 response.header("Access-Control-Allow-Origin: http://localhost:8100");
+                 response.contentType('application/json');
+                 response.send(JSON.stringify(result.rows));
+                 response.status(200).end();
+             }
+         });
+    });
      
  });
  app.get('/orders', function(request,response){
@@ -348,22 +346,7 @@ app.post('/incrementarNumeroDeFactura',function(request, response) {
                      response.send(err);
                      response.status(400).end();
              }else{
-                client.query("DELETE FROM Comida_pertenece_orden WHERE id_comida = "+request.body.id_comida,function(err2,result){
-                     done();
-                     if (err2) {
-                             console.log(err);
-                             response.send(err);
-                             response.status(400).end();
-                     }else{
-                        pusher.trigger('order', 'updated', result.rows);
-                        //response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                         //response.render('pages/db', {results: result.rows};hero
-                         response.contentType('application/json');
-                         response.status(201).end();
-                         console.log("Done");
 
-                     }
-                 });
                  response.contentType('application/json');
                  response.status(201).end();
                  console.log("Done");
