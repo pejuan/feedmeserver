@@ -103,7 +103,7 @@ app.options('/order', cors());
 app.post('/restaurante_create', function(request, response) {
     pg.connect(process.env.DATABASE_URL,function(err, client, done) {
         var sql = { query:'INSERT INTO ', table: 'Restaurante', columns: ['id_usuario','contrasena','nom_restaurante']};
-        sql.values = ["\'"+request.body.id_usuario+"\'","\'"+request.body.contrasena+"\'", "\'"+request.body.nom_restaurante+"\'"];
+        sql.values = ["\'"+request.body.id_usuario+"\'","md5(\'"+request.body.contrasena+"\')", "\'"+request.body.nom_restaurante+"\'"];
         client.query(sql.query+sql.table+" ("+ sql.columns.join(',')+") " + "VALUES (" + sql.values.join(',')+")",function(err,result){
             console.log(sql.query + sql.table + " (" + sql.columns.join(',') + ") " + "VALUES (" + sql.values.join(',') + ")");
              done();
@@ -124,7 +124,7 @@ app.post('/restaurante_create', function(request, response) {
 });
 app.post('/loginRestaurante', function(req, res) {
      pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-         var sql = { query: 'SELECT * FROM ', table: 'Restaurante', where: ' where id_usuario = '+"\'"+req.body.id_usuario+"\'"+' AND contrasena = '+"\'"+req.body.contrasena+"\'"};
+         var sql = { query: 'SELECT * FROM ', table: 'Restaurante', where: ' where id_usuario = '+"\'"+req.body.id_usuario+"\'"+' AND contrasena = '+"md5(\'"+req.body.contrasena+"\')"};
          client.query(sql.query + sql.table + sql.where, function(err, result){
             done();
             if(err){
